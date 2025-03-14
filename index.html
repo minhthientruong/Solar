@@ -17,12 +17,100 @@
         transition: background-image 0.8s linear, box-shadow 0.8s ease-in-out;
         box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
       }
+  .card {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+  max-height: fit-content;
+}
+
+/* Header */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-header img {
+  width: 48px;
+  height: 48px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+}
+
+.card-value {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Slider chung */
+.slider-container {
+  position: relative;
+  height: 8px;
+  background: #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.slider-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 8px;
+}
+
+/* Màu riêng biệt cho từng card */
+#slider-fill-1 {
+  background: linear-gradient(to right, #fa8836, #44eef7bc); /* Kitchen Lights */
+}
+
+#slider-fill-2 {
+  background: linear-gradient(to right, #FFD700, #FF4500); /* Living Room Lights */
+}
+
+/* Ẩn thanh trượt mặc định */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Ẩn nút tròn trên Chrome & Safari */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Ẩn nút tròn trên Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
     </style>
   </head>
 
   <body>
     <div
-      class="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen flex items-center justify-center p-2 md:p-4">
+      class="relative min-h-screen flex items-center justify-center p-2 md:p-4 bg-gradient-to-r from-blue-500 to-purple-600">
       <div
         class="w-full max-w-5xl rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
         <!-- Sidebar -->
@@ -52,7 +140,7 @@
           </div>
         </div>
 
-        <div class="flex-1 rounded-2xl p-2 md:p-4 text-white">
+        <div class="flex-1 rounded-2xl space-y-4 p-2 md:p-4 text-white">
           <div
             class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
             <div>
@@ -72,22 +160,21 @@
             <div class="text-xl cursor-pointer hidden sm:block">🔔</div>
           </div>
           <div
-            class="bg-white/20 rounded-full p-1 md:p-2 mb-4 flex justify-center items-center space-x-2">
+            class="bg-white/20 rounded-xl md:rounded-full p-4 md:p-2 mb-4 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:justify-between sm:gap-4">
             <button
-              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
               HOME
             </button>
             <button
-              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
               BEDROOM
             </button>
-
             <button
-              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
-              LIVINGROOM
+              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              <span class="mx-4"> LIVINGROOM</span>
             </button>
             <button
-              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
               KITCHEN
             </button>
           </div>
@@ -98,7 +185,7 @@
               class="rounded-2xl md:p-4 flex flex-col items-center justify-center">
               <!-- Đồng hồ đo độ ẩm -->
               <div class="flex flex-col items-center">
-                <div class="text-xl font-semibold mb-2">Humidity</div>
+                <div class="text-xl md:mb-6 font-semibold mb-2">Độ Ẩm</div>
                 <div
                   class="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
                   <div
@@ -127,9 +214,9 @@
             </div>
 
             <div
-              class="rounded-2xl md:p-4 flex flex-col items-center justify-center">
+              class="rounded-2xl md:p-4 my-8 flex flex-col items-center justify-center">
               <div class="flex flex-col items-center">
-                <div class="text-xl font-semibold mb-2">Temperature</div>
+                <div class="text-xl md:mb-6 font-semibold mb-2">Nhiệt Độ</div>
                 <div
                   class="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
                   <div
@@ -156,7 +243,7 @@
             </div>
             <!-- Điều khiển máy lạnh -->
             <div
-              class="bg-purple-200 bg-opacity-50 rounded-2xl p-3 md:p-4 relative transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+              class="bg-purple-100 bg-opacity-50 rounded-2xl p-3 md:p-4 relative transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="flex justify-between">
                 <div class="text-gray-800 font-medium text-sm md:text-base">
                   Air Conditioner
@@ -176,43 +263,97 @@
               <img
                 src="assets/img/airConditioner.png"
                 alt="Air Conditioner"
-                class="mx-auto w-32 md:w-80 py-2 mt-[-36px]" />
+                class="mx-auto w-38 md:w-80 py-2 mt-[-36px]" />
 
               <!-- Nút tăng giảm nhiệt độ -->
               <div class="flex justify-center mt-[-36px]">
                 <div class="flex items-center space-x-4">
                   <button
                     id="increase-temp"
-                    class="text-2xl font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
+                    class="text-sm font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
                     ➕
                   </button>
                   <button
                     id="decrease-temp"
-                    class="text-2xl font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
+                    class="text-sm font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
                     ➖
                   </button>
                 </div>
               </div>
             </div>
+<div class=" justify-center items-center md:items-start p-4">
+  <!-- Card 1: Kitchen Lights -->
+  <div class="bg-black/20 shadow-lg rounded-lg p-4 w-full max-w-sm">
+    <div class="flex items-center space-x-4">
+      <div class="w-12 h-12">
+        <img src="assets/img/3dKitchenLight.png" alt="Kitchen Light" class="w-full h-full">
+      </div>
+      <div>
+        <div class="text-lg font-semibold text-white">Kitchen Lights</div>
+        <div id="brightness-value-1" class="text-gray-400 text-sm">71%</div>
+      </div>
+    </div>
+    <div class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer" id="slider-container-1">
+      <div id="slider-fill-1" class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-blue-400 rounded-lg" style="width: 71%;"></div>
+      <input id="brightness-slider-1" type="range" min="0" max="100" value="71" class="absolute top-0 left-0 w-full h-full opacity-0">
+    </div>
+  </div>
 
-            <div class="bg-gray-700 rounded-2xl p-3 md:p-4 flex items-center">
-              <div class="w-full">
-                <div class="text-white font-medium text-sm md:text-base">
-                  ON
-                </div>
-                <div
-                  class="w-10 h-10 md:w-12 md:h-12 mt-2 mb-2 md:mb-4 flex items-center justify-center">
-                  <span class="text-xl md:text-2xl">💡</span>
-                </div>
-                <div class="h-1 md:h-2 bg-gray-600 rounded-full relative">
-                  <div
-                    class="absolute w-2/5 h-full bg-purple-500 rounded-full"></div>
-                  <div
-                    class="absolute w-3 h-3 md:w-4 md:h-4 bg-white rounded-full top-1/2 left-2/5 transform -translate-y-1/2 -translate-x-1/2"></div>
-                </div>
-              </div>
-            </div>
+  <!-- Card 2: Living Room Lights -->
+  <div class="bg-black/20 md:mt-4 shadow-lg rounded-lg p-4 w-full max-w-sm">
+    <div class="flex items-center space-x-4">
+      <div class="w-12 h-12">
+        <img src="assets/img/3dKitchenLight.png" alt="Kitchen Light" class="w-full h-full">
+      </div>
+      <div>
+        <div class="text-lg font-semibold text-white">Living Room Lights</div>
+        <div id="brightness-value-2" class="text-gray-400 text-sm">50%</div>
+      </div>
+    </div>
+    <div class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer" id="slider-container-2">
+      <div id="slider-fill-2" class="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-red-500 rounded-lg" style="width: 50%;"></div>
+      <input id="brightness-slider-2" type="range" min="0" max="100" value="50" class="absolute top-0 left-0 w-full h-full opacity-0">
+    </div>
+  </div>
+</div>
+            <!-- Điều khiển đèn độ sáng -->
 
+
+   <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function setupSlider(sliderId, fillId, valueId, containerId) {
+                const slider = document.getElementById(sliderId);
+                const sliderFill = document.getElementById(fillId);
+                const brightnessValue = document.getElementById(valueId);
+                const sliderContainer = document.getElementById(containerId);
+
+                // Cập nhật giá trị khi kéo slider
+                slider.addEventListener("input", updateSlider);
+
+                // Cập nhật giá trị khi click trực tiếp vào thanh slider
+                sliderContainer.addEventListener("click", function (event) {
+                    const rect = sliderContainer.getBoundingClientRect();
+                    const offsetX = event.clientX - rect.left;
+                    const newValue = Math.round((offsetX / rect.width) * 100);
+
+                    slider.value = newValue;
+                    updateSlider();
+                });
+
+                function updateSlider() {
+                    const value = slider.value;
+                    sliderFill.style.width = `${value}%`;
+                    brightnessValue.textContent = `${value}%`;
+                }
+            }
+
+            // Kích hoạt điều khiển cho cả 2 card
+            setupSlider("brightness-slider-1", "slider-fill-1", "brightness-value-1", "slider-container-1");
+            setupSlider("brightness-slider-2", "slider-fill-2", "brightness-value-2", "slider-container-2");
+        });
+    </script>
+
+</div>
             <div class="col-span-1 sm:col-span-2 lg:col-span-3 mt-2 md:mt-4">
               <div
                 class="flex justify-between items-center text-xs md:text-sm mb-1 md:mb-2">
