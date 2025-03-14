@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="https://www.unpkg.com/@eohjsc/era-widget@1.1.3/src/index.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Home Dashboard</title>
+    <style>
+      /* Hiệu ứng viền neon */
+      .gauge-ring {
+        transition: background-image 0.8s linear, box-shadow 0.8s ease-in-out;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      class="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen flex items-center justify-center p-2 md:p-4">
+      <div
+        class="w-full max-w-5xl rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-ful md:w-24 md:pr-4 mb-4 md:mb-0">
+          <div
+            class="flex md:flex-col md:space-y-4 space-x-2 md:space-x-0 justify-between">
+            <button
+              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
+              <i data-lucide="layout-dashboard" class="text-xl mb-1"></i>
+              <span class="hidden md:inline">Dashboard</span>
+            </button>
+            <button
+              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
+              <i data-lucide="user" class="text-xl mb-1"></i>
+              <span class="hidden md:inline">Profile</span>
+            </button>
+            <button
+              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
+              <i data-lucide="shield" class="text-xl mb-1"></i>
+              <span class="hidden md:inline">Security</span>
+            </button>
+            <button
+              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
+              <i data-lucide="settings" class="text-xl mb-1"></i>
+              <span class="hidden md:inline">Settings</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex-1 rounded-2xl p-2 md:p-4 text-white">
+          <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
+            <div>
+              <div class="text-xl font-bold">9:30PM</div>
+              <div class="text-xs sm:text-sm text-gray-400">
+                Friday | September 23, 2022
+              </div>
+            </div>
+            <div
+              class="bg-gray-700 rounded-full px-2 md:px-4 py-1 md:py-2 flex items-center w-full sm:w-48">
+              <input
+                type="text"
+                placeholder="Device search..."
+                class="bg-transparent border-none outline-none w-full text-white text-xs md:text-sm" />
+              <span>🔍</span>
+            </div>
+            <div class="text-xl cursor-pointer hidden sm:block">🔔</div>
+          </div>
+          <div
+            class="bg-white/20 rounded-full p-1 md:p-2 mb-4 flex justify-center items-center space-x-2">
+            <button
+              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              HOME
+            </button>
+            <button
+              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              BEDROOM
+            </button>
+
+            <button
+              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              LIVINGROOM
+            </button>
+            <button
+              class="w-20 h-10 md:w-24 md:h-12 rounded-full flex-1 flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
+              KITCHEN
+            </button>
+          </div>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
+            <div
+              class="rounded-2xl md:p-4 flex flex-col items-center justify-center">
+              <!-- Đồng hồ đo độ ẩm -->
+              <div class="flex flex-col items-center">
+                <div class="text-xl font-semibold mb-2">Humidity</div>
+                <div
+                  class="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
+                  <div
+                    id="gaugeHumidity"
+                    class="absolute inset-0 rounded-full p-[5px] gauge-ring"></div>
+                  <div
+                    class="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
+                    <div
+                      class="relative w-28 h-28 sm:w-36 sm:h-36 bg-gray-900 rounded-full flex items-center justify-center shadow-lg">
+                      <span
+                        id="humidityValue"
+                        class="absolute text-lg font-bold text-white z-10"
+                        >--%</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onclick="updateHumidity()"
+                  class="mt-4 bg-green-600 text-white px-3 py-1 rounded-xl text-xs hover:bg-green-700">
+                  💧 Cập nhật độ ẩm
+                </button>
+              </div>
+
+              <!-- Đồng hồ đo nhiệt độ -->
+            </div>
+
+            <div
+              class="rounded-2xl md:p-4 flex flex-col items-center justify-center">
+              <div class="flex flex-col items-center">
+                <div class="text-xl font-semibold mb-2">Temperature</div>
+                <div
+                  class="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
+                  <div
+                    id="gaugeTemperature"
+                    class="absolute inset-0 rounded-full p-[5px] gauge-ring"></div>
+                  <div
+                    class="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
+                    <div
+                      class="relative w-28 h-28 sm:w-36 sm:h-36 bg-gray-900 rounded-full flex items-center justify-center shadow-lg">
+                      <span
+                        id="temperatureValue"
+                        class="absolute text-lg font-bold text-white z-10"
+                        >--°C</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onclick="updateTemperature()"
+                  class="mt-4 bg-red-600 text-white px-3 py-1 rounded-xl text-xs hover:bg-red-700">
+                  🌡️ Cập nhật nhiệt độ
+                </button>
+              </div>
+            </div>
+            <!-- Điều khiển máy lạnh -->
+            <div
+              class="bg-purple-200 bg-opacity-50 rounded-2xl p-3 md:p-4 relative transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+              <div class="flex justify-between">
+                <div class="text-gray-800 font-medium text-sm md:text-base">
+                  Air Conditioner
+                </div>
+                <i data-lucide="circle-power" class="text-xl mb-1"></i>
+              </div>
+
+              <!-- Hiển thị nhiệt độ -->
+              <div class="flex mt-6 justify-center">
+                <div
+                  id="temperature"
+                  class="text-gray-800 font-bold text-5xl text-center">
+                  20°
+                </div>
+              </div>
+
+              <img
+                src="assets/img/airConditioner.png"
+                alt="Air Conditioner"
+                class="mx-auto w-32 md:w-80 py-2 mt-[-36px]" />
+
+              <!-- Nút tăng giảm nhiệt độ -->
+              <div class="flex justify-center mt-[-36px]">
+                <div class="flex items-center space-x-4">
+                  <button
+                    id="increase-temp"
+                    class="text-2xl font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
+                    ➕
+                  </button>
+                  <button
+                    id="decrease-temp"
+                    class="text-2xl font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
+                    ➖
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-700 rounded-2xl p-3 md:p-4 flex items-center">
+              <div class="w-full">
+                <div class="text-white font-medium text-sm md:text-base">
+                  ON
+                </div>
+                <div
+                  class="w-10 h-10 md:w-12 md:h-12 mt-2 mb-2 md:mb-4 flex items-center justify-center">
+                  <span class="text-xl md:text-2xl">💡</span>
+                </div>
+                <div class="h-1 md:h-2 bg-gray-600 rounded-full relative">
+                  <div
+                    class="absolute w-2/5 h-full bg-purple-500 rounded-full"></div>
+                  <div
+                    class="absolute w-3 h-3 md:w-4 md:h-4 bg-white rounded-full top-1/2 left-2/5 transform -translate-y-1/2 -translate-x-1/2"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3 mt-2 md:mt-4">
+              <div
+                class="flex justify-between items-center text-xs md:text-sm mb-1 md:mb-2">
+                <div>90kwh</div>
+                <button>↺</button>
+              </div>
+              <div class="h-16 md:h-20 border-b border-gray-600 relative">
+                <div class="absolute inset-0 flex items-end">
+                  <div class="flex-1 flex items-end justify-center">
+                    <div class="w-1 h-6 md:h-8 bg-white"></div>
+                  </div>
+                  <div class="flex-1 flex items-end justify-center">
+                    <div class="w-1 h-8 md:h-10 bg-white"></div>
+                  </div>
+                  <div class="flex-1 flex items-end justify-center">
+                    <div
+                      class="w-2 md:w-4 h-12 md:h-16 bg-purple-500 bg-opacity-50"></div>
+                  </div>
+                  <div class="flex-1 flex items-end justify-center">
+                    <div class="w-1 h-10 md:h-12 bg-white"></div>
+                  </div>
+                  <div class="flex-1 flex items-end justify-center">
+                    <div class="w-1 h-6 md:h-8 bg-white"></div>
+                  </div>
+                  <div class="flex-1 flex items-end justify-center">
+                    <div class="w-1 h-10 md:h-14 bg-white"></div>
+                  </div>
+                  <div class="flex-1 flex items-end justify-center">
+                    <div class="w-1 h-6 md:h-8 bg-white"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-between text-xs text-gray-400 mt-1">
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+                <div>Sun</div>
+              </div>
+            </div>
+
+            <div
+              class="col-span-1 sm:col-span-2 row-span-2 bg-gray-700 rounded-2xl overflow-hidden">
+              <div class="h-32 sm:h-40 md:h-48 relative">
+                <img
+                  src="/api/placeholder/400/200"
+                  alt="Living Room"
+                  class="w-full h-full object-cover brightness-75" />
+              </div>
+              <div class="px-2 md:px-4 py-1 md:py-2">
+                <div
+                  class="h-1 md:h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 to-purple-500 rounded-full relative mb-2 md:mb-4">
+                  <div
+                    class="absolute w-3 h-3 md:w-4 md:h-4 bg-gray-700 border-2 border-white rounded-full top-1/2 left-3/4 transform -translate-y-1/2 -translate-x-1/2"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-1 md:gap-2">
+                  <button
+                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                    <span class="text-base md:text-lg mb-0 md:mb-1">🛋️</span>
+                    <span class="text-xs">Living room</span>
+                  </button>
+                  <button
+                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                    <span class="text-base md:text-lg mb-0 md:mb-1">🛏️</span>
+                    <span class="text-xs">Bedroom</span>
+                  </button>
+                  <button
+                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                    <span class="text-base md:text-lg mb-0 md:mb-1">👶</span>
+                    <span class="text-xs">Children's</span>
+                  </button>
+                  <button
+                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                    <span class="text-base md:text-lg mb-0 md:mb-1">🍳</span>
+                    <span class="text-xs">Kitchen</span>
+                  </button>
+                  <button
+                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                    <span class="text-base md:text-lg mb-0 md:mb-1">🚿</span>
+                    <span class="text-xs">Bathroom</span>
+                  </button>
+                  <button
+                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                    <span class="text-base md:text-lg mb-0 md:mb-1">🚗</span>
+                    <span class="text-xs">Garage</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-700 rounded-2xl p-3 md:p-4 row-span-2">
+              <div class="flex items-center mb-2 md:mb-4">
+                <div class="flex-1">
+                  <div class="text-white font-medium text-sm md:text-base">
+                    Billie Jean
+                  </div>
+                  <div class="text-gray-400 text-xs md:text-sm">
+                    Michael Jackson
+                  </div>
+                </div>
+                <div
+                  class="w-10 h-10 md:w-12 md:h-12 bg-gray-500 rounded overflow-hidden">
+                  <img
+                    src="/api/placeholder/50/50"
+                    alt="Album cover"
+                    class="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div class="h-1 bg-gray-600 rounded-full relative mb-1">
+                <div
+                  class="absolute w-7/10 h-full bg-purple-500 rounded-full"></div>
+              </div>
+              <div
+                class="flex justify-between text-xs text-gray-400 mb-2 md:mb-4">
+                <div>3:30</div>
+                <div>4:20</div>
+              </div>
+              <div
+                class="flex justify-center items-center space-x-2 md:space-x-4">
+                <button class="text-base md:text-lg">⏮️</button>
+                <button
+                  class="w-6 h-6 md:w-8 md:h-8 bg-gray-200 text-gray-800 rounded-full flex items-center justify-center">
+                  ⏸️
+                </button>
+                <button class="text-base md:text-lg">⏭️</button>
+                <button class="text-base md:text-lg">🔊</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
