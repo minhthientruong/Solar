@@ -1,0 +1,100 @@
+/* Hiệu ứng viền neon */
+.gauge-ring {
+  transition: background-image 0.8s linear, box-shadow 0.8s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+.card {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+  max-height: fit-content;
+}
+
+/* Header */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-header img {
+  width: 48px;
+  height: 48px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+}
+
+.card-value {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Slider chung */
+.slider-container {
+  position: relative;
+  height: 8px;
+  background: #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.slider-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 8px;
+}
+
+/* Màu riêng biệt cho từng card */
+#slider-fill-1 {
+  background: linear-gradient(
+    to right,
+    #fa8836,
+    #44eef7bc
+  ); /* Kitchen Lights */
+}
+
+#slider-fill-2 {
+  background: linear-gradient(
+    to right,
+    #00ff80,
+    #a76fe2
+  ); /* Living Room Lights */
+}
+
+/* Ẩn thanh trượt mặc định */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Ẩn nút tròn trên Chrome & Safari */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Ẩn nút tròn trên Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  background: transparent;
+  cursor: pointer;
+}

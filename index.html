@@ -6,111 +6,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <script src="https://www.unpkg.com/@eohjsc/era-widget@1.1.3/src/index.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Home Dashboard</title>
-    <style>
-      /* Hiệu ứng viền neon */
-      .gauge-ring {
-        transition: background-image 0.8s linear, box-shadow 0.8s ease-in-out;
-        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-      }
-  .card {
-  background: rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
-  padding: 16px;
-  width: 100%;
-  max-height: fit-content;
-}
+      <link rel="stylesheet" href="styles.css">
 
-/* Header */
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
 
-.card-header img {
-  width: 48px;
-  height: 48px;
-}
-
-.card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
-}
-
-.card-value {
-  font-size: 0.9rem;
-  color: #ccc;
-}
-
-/* Slider chung */
-.slider-container {
-  position: relative;
-  height: 8px;
-  background: #ccc;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 16px;
-}
-
-.slider-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  border-radius: 8px;
-}
-
-/* Màu riêng biệt cho từng card */
-#slider-fill-1 {
-  background: linear-gradient(to right, #fa8836, #44eef7bc); /* Kitchen Lights */
-}
-
-#slider-fill-2 {
-  background: linear-gradient(to right, #FFD700, #FF4500); /* Living Room Lights */
-}
-
-/* Ẩn thanh trượt mặc định */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 8px;
-  background: transparent;
-  outline: none;
-  cursor: pointer;
-}
-
-/* Ẩn nút tròn trên Chrome & Safari */
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 0;
-  height: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-/* Ẩn nút tròn trên Firefox */
-input[type="range"]::-moz-range-thumb {
-  width: 0;
-  height: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-    </style>
   </head>
 
   <body>
     <div
-      class="relative min-h-screen flex items-center justify-center p-2 md:p-4 bg-gradient-to-r from-blue-500 to-purple-600">
+      class="relative min-h-screen flex items-center justify-center p-2 md:p-4 bg-gradient-to-br from-green-700 to-purple-600">
       <div
         class="w-full max-w-5xl rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
         <!-- Sidebar -->
@@ -150,14 +60,14 @@ input[type="range"]::-moz-range-thumb {
               </div>
             </div>
             <div
-              class="bg-gray-700 rounded-full px-2 md:px-4 py-1 md:py-2 flex items-center w-full sm:w-48">
+              class="bg-gray-700 rounded-full px-2 md:px-4 py-1 md:py-2 flex items-center w-40 sm:w-96">
               <input
                 type="text"
                 placeholder="Device search..."
                 class="bg-transparent border-none outline-none w-full text-white text-xs md:text-sm" />
               <span>🔍</span>
             </div>
-            <div class="text-xl cursor-pointer hidden sm:block">🔔</div>
+            <div class="text-4xl cursor-pointer hidden sm:block">🔔</div>
           </div>
           <div
             class="bg-white/20 rounded-xl md:rounded-full p-4 md:p-2 mb-4 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:justify-between sm:gap-4">
@@ -245,17 +155,17 @@ input[type="range"]::-moz-range-thumb {
             <div
               class="bg-purple-100 bg-opacity-50 rounded-2xl p-3 md:p-4 relative transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="flex justify-between">
-                <div class="text-gray-800 font-medium text-sm md:text-base">
+                <div class="text-gray-800 font-semibold text-sm md:text-base">
                   Air Conditioner
                 </div>
-                <i data-lucide="circle-power" class="text-xl mb-1"></i>
+                <i data-lucide="circle-power" class="text-xl mb-1 cursor-pointer"></i>
               </div>
 
               <!-- Hiển thị nhiệt độ -->
               <div class="flex mt-6 justify-center">
                 <div
                   id="temperature"
-                  class="text-gray-800 font-bold text-5xl text-center">
+                  class="bg-gradient-to-br from-green-700 to-purple-600 bg-clip-text text-transparent font-bold text-5xl text-center">
                   20°
                 </div>
               </div>
@@ -289,7 +199,7 @@ input[type="range"]::-moz-range-thumb {
         <img src="assets/img/3dKitchenLight.png" alt="Kitchen Light" class="w-full h-full">
       </div>
       <div>
-        <div class="text-lg font-semibold text-white">Kitchen Lights</div>
+        <div class="text-lg font-semibold text-white">Bedroom Lights</div>
         <div id="brightness-value-1" class="text-gray-400 text-sm">71%</div>
       </div>
     </div>
@@ -319,83 +229,29 @@ input[type="range"]::-moz-range-thumb {
             <!-- Điều khiển đèn độ sáng -->
 
 
-   <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function setupSlider(sliderId, fillId, valueId, containerId) {
-                const slider = document.getElementById(sliderId);
-                const sliderFill = document.getElementById(fillId);
-                const brightnessValue = document.getElementById(valueId);
-                const sliderContainer = document.getElementById(containerId);
 
-                // Cập nhật giá trị khi kéo slider
-                slider.addEventListener("input", updateSlider);
-
-                // Cập nhật giá trị khi click trực tiếp vào thanh slider
-                sliderContainer.addEventListener("click", function (event) {
-                    const rect = sliderContainer.getBoundingClientRect();
-                    const offsetX = event.clientX - rect.left;
-                    const newValue = Math.round((offsetX / rect.width) * 100);
-
-                    slider.value = newValue;
-                    updateSlider();
-                });
-
-                function updateSlider() {
-                    const value = slider.value;
-                    sliderFill.style.width = `${value}%`;
-                    brightnessValue.textContent = `${value}%`;
-                }
-            }
-
-            // Kích hoạt điều khiển cho cả 2 card
-            setupSlider("brightness-slider-1", "slider-fill-1", "brightness-value-1", "slider-container-1");
-            setupSlider("brightness-slider-2", "slider-fill-2", "brightness-value-2", "slider-container-2");
-        });
-    </script>
 
 </div>
-            <div class="col-span-1 sm:col-span-2 lg:col-span-3 mt-2 md:mt-4">
-              <div
-                class="flex justify-between items-center text-xs md:text-sm mb-1 md:mb-2">
-                <div>90kwh</div>
-                <button>↺</button>
-              </div>
-              <div class="h-16 md:h-20 border-b border-gray-600 relative">
-                <div class="absolute inset-0 flex items-end">
-                  <div class="flex-1 flex items-end justify-center">
-                    <div class="w-1 h-6 md:h-8 bg-white"></div>
-                  </div>
-                  <div class="flex-1 flex items-end justify-center">
-                    <div class="w-1 h-8 md:h-10 bg-white"></div>
-                  </div>
-                  <div class="flex-1 flex items-end justify-center">
-                    <div
-                      class="w-2 md:w-4 h-12 md:h-16 bg-purple-500 bg-opacity-50"></div>
-                  </div>
-                  <div class="flex-1 flex items-end justify-center">
-                    <div class="w-1 h-10 md:h-12 bg-white"></div>
-                  </div>
-                  <div class="flex-1 flex items-end justify-center">
-                    <div class="w-1 h-6 md:h-8 bg-white"></div>
-                  </div>
-                  <div class="flex-1 flex items-end justify-center">
-                    <div class="w-1 h-10 md:h-14 bg-white"></div>
-                  </div>
-                  <div class="flex-1 flex items-end justify-center">
-                    <div class="w-1 h-6 md:h-8 bg-white"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="flex justify-between text-xs text-gray-400 mt-1">
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
-                <div>Sun</div>
-              </div>
-            </div>
+<!-- Biểu đồ nhiệt độ độ ẩm -->
+         <div class="col-span-1 sm:col-span-2 lg:col-span-3 mt-2 md:mt-4">
+  <div class="flex justify-between items-center text-xs md:text-sm mb-1 md:mb-2">
+    <div>90kWh</div>
+    <button>↺</button>
+  </div>
+  <div class="h-16 md:h-20 border-b border-gray-600 relative">
+    <!-- Thêm một canvas để Chart.js render đồ thị -->
+    <canvas id="energyChart" class="w-full h-full"></canvas>
+  </div>
+  <div class="flex justify-between text-xs text-gray-400 mt-1">
+    <div>Mon</div>
+    <div>Tue</div>
+    <div>Wed</div>
+    <div>Thu</div>
+    <div>Fri</div>
+    <div>Sat</div>
+    <div>Sun</div>
+  </div>
+</div>
 
             <div
               class="col-span-1 sm:col-span-2 row-span-2 bg-gray-700 rounded-2xl overflow-hidden">
