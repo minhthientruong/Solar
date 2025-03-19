@@ -8,21 +8,18 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
     <script src="https://www.unpkg.com/@eohjsc/era-widget@1.1.3/src/index.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Home Dashboard</title>
-      <link rel="stylesheet" href="styles.css">
-
-
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <div
       class="relative min-h-screen flex items-center justify-center p-2 md:p-4 bg-gradient-to-br from-green-700 to-purple-600">
       <div
-        class="w-full max-w-5xl rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
+        class="w-full max-w-7xl rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
         <!-- Sidebar -->
         <div id="sidebar" class="w-ful md:w-24 md:pr-4 mb-4 md:mb-0">
           <div
@@ -49,14 +46,14 @@
             </button>
           </div>
         </div>
-
+        <!-- Bố cục điều khiển trung tâm -->
         <div class="flex-1 rounded-2xl space-y-4 p-2 md:p-4 text-white">
           <div
             class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
-       <div class="text-center">
-  <div id="time" class="text-xl font-bold"></div>
-  <div id="date" class="text-xs sm:text-sm text-gray-400"></div>
-</div>
+            <div class="text-center">
+              <div id="time" class="text-xl font-bold"></div>
+              <div id="date" class="text-xs sm:text-sm text-gray-400"></div>
+            </div>
             <div
               class="bg-gray-700 rounded-full px-2 md:px-4 py-1 md:py-2 flex items-center w-full sm:w-96">
               <input
@@ -86,7 +83,7 @@
               KITCHEN
             </button>
           </div>
-
+          <!-- Bố cục điều khiển -->
           <div
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
             <div
@@ -156,7 +153,9 @@
                 <div class="text-gray-800 font-semibold text-sm md:text-base">
                   Air Conditioner
                 </div>
-                <i data-lucide="circle-power" class="text-xl mb-1 cursor-pointer"></i>
+                <i
+                  data-lucide="circle-power"
+                  class="text-xl mb-1 cursor-pointer"></i>
               </div>
 
               <!-- Hiển thị nhiệt độ -->
@@ -189,291 +188,447 @@
                 </div>
               </div>
             </div>
-<div class=" justify-center items-center md:items-start p-4">
-  <!-- Card 1: Kitchen Lights -->
-  <div class="bg-black/20 shadow-lg rounded-lg p-4 w-full max-w-sm">
-    <div class="flex items-center space-x-4">
-      <div class="w-12 h-12">
-        <img src="assets/img/3dKitchenLight.png" alt="Kitchen Light" class="w-full h-full">
-      </div>
-      <div>
-        <div class="text-lg font-semibold text-white">Bedroom Lights</div>
-        <div id="brightness-value-1" class="text-gray-400 text-sm">71%</div>
-      </div>
-    </div>
-    <div class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer" id="slider-container-1">
-      <div id="slider-fill-1" class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-blue-400 rounded-lg" style="width: 71%;"></div>
-      <input id="brightness-slider-1" type="range" min="0" max="100" value="71" class="absolute top-0 left-0 w-full h-full opacity-0">
-    </div>
-  </div>
-
-  <!-- Card 2: Living Room Lights -->
-  <div class="bg-black/20 md:mt-4 shadow-lg rounded-lg p-4 w-full max-w-sm">
-    <div class="flex items-center space-x-4">
-      <div class="w-12 h-12">
-        <img src="assets/img/3dKitchenLight.png" alt="Kitchen Light" class="w-full h-full">
-      </div>
-      <div>
-        <div class="text-lg font-semibold text-white">Living Room Lights</div>
-        <div id="brightness-value-2" class="text-gray-400 text-sm">50%</div>
-      </div>
-    </div>
-    <div class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer" id="slider-container-2">
-      <div id="slider-fill-2" class="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-red-500 rounded-lg" style="width: 50%;"></div>
-      <input id="brightness-slider-2" type="range" min="0" max="100" value="50" class="absolute top-0 left-0 w-full h-full opacity-0">
-    </div>
-  </div>
-</div>
-            <!-- Điều khiển đèn độ sáng -->
-
-
-
-
-</div>
-<!-- Biểu đồ nhiệt độ độ ẩm -->
- <div id="container-live-chart"></div>
-    <script>
-const CHART_HEIGHT = 700;
-const UPDATE_INTERVAL = 2000;
-const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
-
-// Chart configuration object
-const chartConfig = {
-  chart: {
-    height: CHART_HEIGHT,
-  },
-  time: {
-    timezoneOffset: -420, // UTC+7
-  },
-  rangeSelector: {
-    selected: 0,
-    buttonTheme: {
-      width: 50,
-    },
-    buttons: [
-      { type: "minute", count: 1, text: "1 min", title: "View 1 min" },
-      { type: "minute", count: 10, text: "10 min", title: "View 10 min" },
-      { type: "minute", count: 15, text: "15 min", title: "View 15 min" },
-      { type: "minute", count: 30, text: "30 min", title: "View 30 min" },
-      { type: "minute", count: 60, text: "60 min", title: "View 60 min" },
-    ],
-  },
-  plotOptions: {
-    series: {
-      turboThreshold: 10000,
-    },
-  },
-  navigator: {
-    enabled: false,
-  },
-  series: [
-    {
-      name: "Temperature",
-      data: [],
-      color: "#FF5733", // Màu cam cho nhiệt độ
-    },
-    {
-      name: "Humidity",
-      data: [],
-      color: "#3498db", // Màu xanh cho độ ẩm
-    },
-  ],
-};
-
-class TemperatureHumidityChart {
-  constructor() {
-    this.container = document.getElementById("container-live-chart");
-    this.historyTemperature = [];
-    this.historyHumidity = [];
-    this.configTemperature = null;
-    this.configHumidity = null;
-    this.valueTemperature = null;
-    this.valueHumidity = null;
-    this.chart = null;
-    this.eraWidget = null;
-    this.updateInterval = null;
-    this.updatedHistory = false;
-  }
-
-  initialize() {
-    this.setupChart();
-    this.setupEraWidget();
-    this.requestInitialData();
-    this.startUpdates();
-  }
-
-  setupChart() {
-    this.chart = Highcharts.stockChart(this.container, chartConfig);
-    this.container.style.height = `${CHART_HEIGHT}px`;
-  }
-
-  setupEraWidget() {
-    this.eraWidget = new EraWidget();
-    this.eraWidget.init({
-      mobileHeight: CHART_HEIGHT,
-      onConfiguration: (configuration) => {
-        this.configTemperature = configuration.realtime_configs[0];
-        this.configHumidity = configuration.realtime_configs[1];
-      },
-      onValues: (values) => {
-        this.valueTemperature = values[this.configTemperature?.id]?.value || null;
-        this.valueHumidity = values[this.configHumidity?.id]?.value || null;
-      },
-      onHistories: (history) => {
-        if (!this.updatedHistory && history.length >= 2) {
-          this.historyTemperature = history[0].data;
-          this.historyHumidity = history[1].data;
-          this.updateChartData(true);
-          this.updatedHistory = true;
-        } else {
-          console.log("No historical data received");
-        }
-      },
-    });
-  }
-
-  requestInitialData() {
-    const endTime = Date.now();
-    const startTime = endTime - ONE_DAY_AGO;
-    this.eraWidget.requestHistories(startTime, endTime);
-  }
-
-  updateChartData(isInitial = false) {
-    if (this.chart) {
-      if (this.chart.series[0]) {
-        this.chart.series[0].setData(this.historyTemperature, true);
-      }
-      if (this.chart.series[1]) {
-        this.chart.series[1].setData(this.historyHumidity, true);
-      }
-    } else {
-      console.error("Chart or series not initialized");
-    }
-  }
-
-  startUpdates() {
-    this.updateInterval = setInterval(() => {
-      if (this.valueTemperature !== null && this.valueHumidity !== null) {
-        const newTemperaturePoint = [Date.now(), this.valueTemperature];
-        const newHumidityPoint = [Date.now(), this.valueHumidity];
-        this.historyTemperature.push(newTemperaturePoint);
-        this.historyHumidity.push(newHumidityPoint);
-        this.updateChartData();
-      }
-    }, UPDATE_INTERVAL);
-  }
-
-  destroy() {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-    }
-    if (this.chart) {
-      this.chart.destroy();
-    }
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const chart = new TemperatureHumidityChart();
-  chart.initialize();
-
-  window.addEventListener("unload", () => {
-    chart.destroy();
-  });
-});
-
-
-
-    </script>
-
-            <div
-              class="col-span-1 sm:col-span-2 row-span-2 bg-gray-700 rounded-2xl overflow-hidden">
-              <div class="h-32 sm:h-40 md:h-48 relative">
-                <img
-                  src="/api/placeholder/400/200"
-                  alt="Living Room"
-                  class="w-full h-full object-cover brightness-75" />
-              </div>
-              <div class="px-2 md:px-4 py-1 md:py-2">
-                <div
-                  class="h-1 md:h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 to-purple-500 rounded-full relative mb-2 md:mb-4">
-                  <div
-                    class="absolute w-3 h-3 md:w-4 md:h-4 bg-gray-700 border-2 border-white rounded-full top-1/2 left-3/4 transform -translate-y-1/2 -translate-x-1/2"></div>
+            <div class="justify-center items-center md:items-start p-4">
+              <!-- Bật tăt đèn -->
+              <!-- Card 1: Kitchen Lights -->
+              <div class="bg-black/20 shadow-lg rounded-lg p-4 w-full max-w-sm">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12">
+                    <img
+                      src="assets/img/3dKitchenLight.png"
+                      alt="Kitchen Light"
+                      class="w-full h-full" />
+                  </div>
+                  <div>
+                    <div class="text-lg font-semibold text-white">
+                      Bedroom Lights
+                    </div>
+                    <div id="brightness-value-1" class="text-gray-400 text-sm">
+                      71%
+                    </div>
+                  </div>
                 </div>
-                <div class="grid grid-cols-3 gap-1 md:gap-2">
+                <div
+                  class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer"
+                  id="slider-container-1">
+                  <div
+                    id="slider-fill-1"
+                    class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-blue-400 rounded-lg"
+                    style="width: 71%"></div>
+                  <input
+                    id="brightness-slider-1"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="71"
+                    class="absolute top-0 left-0 w-full h-full opacity-0" />
+                </div>
+              </div>
+
+              <!-- Card 2: Living Room Lights -->
+              <div
+                class="bg-black/20 md:mt-4 mt-4 shadow-lg rounded-lg p-4 w-full max-w-sm">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12">
+                    <img
+                      src="assets/img/3dKitchenLight.png"
+                      alt="Kitchen Light"
+                      class="w-full h-full" />
+                  </div>
+                  <div>
+                    <div class="text-lg font-semibold text-white">
+                      Living Room Lights
+                    </div>
+                    <div id="brightness-value-2" class="text-gray-400 text-sm">
+                      50%
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer"
+                  id="slider-container-2">
+                  <div
+                    id="slider-fill-2"
+                    class="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-red-500 rounded-lg"
+                    style="width: 50%"></div>
+                  <input
+                    id="brightness-slider-2"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    class="absolute top-0 left-0 w-full h-full opacity-0" />
+                </div>
+              </div>
+              <div
+                class="w-full max-w-4xl p-4 bg-gray-800 rounded-lg shadow-lg">
+                <!-- Tiêu đề -->
+                <div class="flex justify-between items-center mb-4">
+                  <h2 class="text-sm font-bold flex">
+                    <i
+                      data-lucide="cctv"
+                      class="md:mr-4 text-red-600 mr-2 text-xl mb-1"></i>
+                    Camera
+                  </h2>
+                </div>
+
+                <!-- Khung Camera -->
+                <div class="relative">
+                  <video
+                    id="cameraFeed"
+                    class="w-full rounded-lg shadow-md"
+                    autoplay>
+                    Trình duyệt không hỗ trợ video.
+                  </video>
+
+                  <!-- Nút phóng to -->
                   <button
-                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                    <span class="text-base md:text-lg mb-0 md:mb-1">🛋️</span>
-                    <span class="text-xs">Living room</span>
-                  </button>
-                  <button
-                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                    <span class="text-base md:text-lg mb-0 md:mb-1">🛏️</span>
-                    <span class="text-xs">Bedroom</span>
-                  </button>
-                  <button
-                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                    <span class="text-base md:text-lg mb-0 md:mb-1">👶</span>
-                    <span class="text-xs">Children's</span>
-                  </button>
-                  <button
-                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                    <span class="text-base md:text-lg mb-0 md:mb-1">🍳</span>
-                    <span class="text-xs">Kitchen</span>
-                  </button>
-                  <button
-                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                    <span class="text-base md:text-lg mb-0 md:mb-1">🚿</span>
-                    <span class="text-xs">Bathroom</span>
-                  </button>
-                  <button
-                    class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                    <span class="text-base md:text-lg mb-0 md:mb-1">🚗</span>
-                    <span class="text-xs">Garage</span>
+                    onclick="toggleFullScreen()"
+                    class="absolute bottom-1 right-1 bg-black/20 text-white p-1 rounded-full hover:bg-black/50">
+                    <i data-lucide="scan-eye" class="text-xl mb-1"></i>
                   </button>
                 </div>
               </div>
             </div>
 
-            <div class="bg-gray-700 rounded-2xl p-3 md:p-4 row-span-2">
-              <div class="flex items-center mb-2 md:mb-4">
-                <div class="flex-1">
-                  <div class="text-white font-medium text-sm md:text-base">
-                    Billie Jean
-                  </div>
-                  <div class="text-gray-400 text-xs md:text-sm">
-                    Michael Jackson
-                  </div>
-                </div>
-                <div
-                  class="w-10 h-10 md:w-12 md:h-12 bg-gray-500 rounded overflow-hidden">
-                  <img
-                    src="/api/placeholder/50/50"
-                    alt="Album cover"
-                    class="w-full h-full object-cover" />
-                </div>
-              </div>
-              <div class="h-1 bg-gray-600 rounded-full relative mb-1">
-                <div
-                  class="absolute w-7/10 h-full bg-purple-500 rounded-full"></div>
-              </div>
+            <!-- Card 3: mở cửa -->
+            <div
+              class="bg-purple-100 bg-opacity-50 flex flex-col rounded-2xl p-6 md:p-8 relative transition-transform duration-300 hover:shadow-xl sm:col-span-2 lg:col-span-2">
+              <!-- Tiêu đề bên trái -->
               <div
-                class="flex justify-between text-xs text-gray-400 mb-2 md:mb-4">
-                <div>3:30</div>
-                <div>4:20</div>
+                class="text-gray-800 font-semibold text-sm md:text-base mb-4 text-left">
+                DOOR GARAGE
               </div>
-              <div
-                class="flex justify-center items-center space-x-2 md:space-x-4">
-                <button class="text-base md:text-lg">⏮️</button>
-                <button
-                  class="w-6 h-6 md:w-8 md:h-8 bg-gray-200 text-gray-800 rounded-full flex items-center justify-center">
-                  ⏸️
-                </button>
-                <button class="text-base md:text-lg">⏭️</button>
-                <button class="text-base md:text-lg">🔊</button>
+
+              <!-- Hình ảnh nằm giữa -->
+              <div class="flex flex-col items-center">
+                <img
+                  src="assets/img/door-garage.png"
+                  alt="Door Garage"
+                  class="w-40 md:w-80 py-2 mb-6" />
+
+                <!-- Nút bấm nằm giữa -->
+                <div class="flex space-x-4">
+                  <button
+                    id="open-door"
+                    class="text-sm font-bold bg-gray-900 text-white px-6 py-3 rounded-full shadow-md hover:bg-gray-800 active:scale-90 transition-transform duration-150">
+                    OPEN
+                  </button>
+                  <button
+                    id="close-door"
+                    class="text-sm font-bold bg-red-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-red-500 active:scale-90 transition-transform duration-150">
+                    CLOSE
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- Biểu đồ nhiệt độ độ ẩm -->
+          <div id="container-live-chart"></div>
+          <script>
+            const CHART_HEIGHT = 700;
+            const UPDATE_INTERVAL = 2000;
+            const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
+
+            // Chart configuration object
+            const chartConfig = {
+              chart: {
+                height: CHART_HEIGHT,
+              },
+              time: {
+                timezoneOffset: -420, // UTC+7
+              },
+              rangeSelector: {
+                selected: 0,
+                buttonTheme: {
+                  width: 50,
+                },
+                buttons: [
+                  {
+                    type: "minute",
+                    count: 1,
+                    text: "1 min",
+                    title: "View 1 min",
+                  },
+                  {
+                    type: "minute",
+                    count: 10,
+                    text: "10 min",
+                    title: "View 10 min",
+                  },
+                  {
+                    type: "minute",
+                    count: 15,
+                    text: "15 min",
+                    title: "View 15 min",
+                  },
+                  {
+                    type: "minute",
+                    count: 30,
+                    text: "30 min",
+                    title: "View 30 min",
+                  },
+                  {
+                    type: "minute",
+                    count: 60,
+                    text: "60 min",
+                    title: "View 60 min",
+                  },
+                ],
+              },
+              plotOptions: {
+                series: {
+                  turboThreshold: 10000,
+                },
+              },
+              navigator: {
+                enabled: false,
+              },
+              series: [
+                {
+                  name: "Temperature",
+                  data: [],
+                  color: "#FF5733", // Màu cam cho nhiệt độ
+                },
+                {
+                  name: "Humidity",
+                  data: [],
+                  color: "#3498db", // Màu xanh cho độ ẩm
+                },
+              ],
+            };
+
+            class TemperatureHumidityChart {
+              constructor() {
+                this.container = document.getElementById(
+                  "container-live-chart"
+                );
+                this.historyTemperature = [];
+                this.historyHumidity = [];
+                this.configTemperature = null;
+                this.configHumidity = null;
+                this.valueTemperature = null;
+                this.valueHumidity = null;
+                this.chart = null;
+                this.eraWidget = null;
+                this.updateInterval = null;
+                this.updatedHistory = false;
+              }
+
+              initialize() {
+                this.setupChart();
+                this.setupEraWidget();
+                this.requestInitialData();
+                this.startUpdates();
+              }
+
+              setupChart() {
+                this.chart = Highcharts.stockChart(this.container, chartConfig);
+                this.container.style.height = `${CHART_HEIGHT}px`;
+              }
+
+              setupEraWidget() {
+                this.eraWidget = new EraWidget();
+                this.eraWidget.init({
+                  mobileHeight: CHART_HEIGHT,
+                  onConfiguration: (configuration) => {
+                    this.configTemperature = configuration.realtime_configs[0];
+                    this.configHumidity = configuration.realtime_configs[1];
+                  },
+                  onValues: (values) => {
+                    this.valueTemperature =
+                      values[this.configTemperature?.id]?.value || null;
+                    this.valueHumidity =
+                      values[this.configHumidity?.id]?.value || null;
+                  },
+                  onHistories: (history) => {
+                    if (!this.updatedHistory && history.length >= 2) {
+                      this.historyTemperature = history[0].data;
+                      this.historyHumidity = history[1].data;
+                      this.updateChartData(true);
+                      this.updatedHistory = true;
+                    } else {
+                      console.log("No historical data received");
+                    }
+                  },
+                });
+              }
+
+              requestInitialData() {
+                const endTime = Date.now();
+                const startTime = endTime - ONE_DAY_AGO;
+                this.eraWidget.requestHistories(startTime, endTime);
+              }
+
+              updateChartData(isInitial = false) {
+                if (this.chart) {
+                  if (this.chart.series[0]) {
+                    this.chart.series[0].setData(this.historyTemperature, true);
+                  }
+                  if (this.chart.series[1]) {
+                    this.chart.series[1].setData(this.historyHumidity, true);
+                  }
+                } else {
+                  console.error("Chart or series not initialized");
+                }
+              }
+
+              startUpdates() {
+                this.updateInterval = setInterval(() => {
+                  if (
+                    this.valueTemperature !== null &&
+                    this.valueHumidity !== null
+                  ) {
+                    const newTemperaturePoint = [
+                      Date.now(),
+                      this.valueTemperature,
+                    ];
+                    const newHumidityPoint = [Date.now(), this.valueHumidity];
+                    this.historyTemperature.push(newTemperaturePoint);
+                    this.historyHumidity.push(newHumidityPoint);
+                    this.updateChartData();
+                  }
+                }, UPDATE_INTERVAL);
+              }
+
+              destroy() {
+                if (this.updateInterval) {
+                  clearInterval(this.updateInterval);
+                }
+                if (this.chart) {
+                  this.chart.destroy();
+                }
+              }
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              const chart = new TemperatureHumidityChart();
+              chart.initialize();
+
+              window.addEventListener("unload", () => {
+                chart.destroy();
+              });
+            });
+          </script>
+
+          <div
+            class="col-span-1 sm:col-span-2 row-span-2 bg-gray-700 rounded-2xl overflow-hidden">
+            <div class="h-32 sm:h-40 md:h-48 relative">
+              <h2 class="text-sm font-bold flex">
+                <i
+                  data-lucide="cctv"
+                  class="md:mx-4 text-red-600 mr-2 text-xl mb-1"></i>
+                Camera Giám Sát
+              </h2>
+            </div>
+            <div class="px-2  md:px-4 py-1 md:py-2">
+              <div
+                class="h-1 md:h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 to-purple-500 rounded-full relative mb-2 md:mb-4">
+                <div
+                  class="absolute w-3 h-3 md:w-4 md:h-4 bg-gray-700 border-2 border-white rounded-full top-1/2 left-3/4 transform -translate-y-1/2 -translate-x-1/2"></div>
+              </div>
+              <div class="grid grid-cols-3 gap-1 md:gap-2">
+                <button
+                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                  <span class="text-base md:text-lg mb-0 md:mb-1">🛋️</span>
+                  <span class="text-xs">Living room</span>
+                </button>
+                <button
+                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                  <span class="text-base md:text-lg mb-0 md:mb-1">🛏️</span>
+                  <span class="text-xs">Bedroom</span>
+                </button>
+                <button
+                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                  <span class="text-base md:text-lg mb-0 md:mb-1">👶</span>
+                  <span class="text-xs">Children's</span>
+                </button>
+                <button
+                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                  <span class="text-base md:text-lg mb-0 md:mb-1">🍳</span>
+                  <span class="text-xs">Kitchen</span>
+                </button>
+                <button
+                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                  <span class="text-base md:text-lg mb-0 md:mb-1">🚿</span>
+                  <span class="text-xs">Bathroom</span>
+                </button>
+                <button
+                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
+                  <span class="text-base md:text-lg mb-0 md:mb-1">🚗</span>
+                  <span class="text-xs">Garage</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Trạng thái  -->
+
+        <div
+          class="bg-gray-200 max-h-auto text-white flex justify-center ">
+          <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+              <button
+                class="text-gray-400 hover:text-white"
+                onclick="fetchWeather()">
+                <i data-lucide="refresh-cw" class="w-6 h-6"></i>
+              </button>
+            </div>
+
+            <!-- Weather Info -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div
+                class="flex flex-col items-center p-3 bg-gray-700 rounded-md">
+                <i data-lucide="cloud-sun" class="w-6 h-6 text-white-400"></i>
+                <span class="text-sm">Weather</span>
+                <span id="temperature" class="text-lg font-semibold">--°C</span>
+              </div>
+
+              <div
+                class="flex flex-col items-center p-3 bg-gray-700 rounded-md">
+                <i data-lucide="zap" class="w-6 h-6 text-green-400"></i>
+                <span class="text-sm">Điện năng</span>
+                <span id="wind-speed" class="text-lg font-semibold"
+                  >-- kW/h</span
+                >
+              </div>
+            </div>
+
+            <!-- WiFi Status -->
+            <div
+              class="flex items-center justify-between p-3 bg-gray-700 rounded-md mb-4">
+              <div class="flex items-center space-x-2">
+                <i
+                  data-lucide="wifi"
+                  id="wifi-icon"
+                  class="w-6 h-6 text-green-400"></i>
+                <span class="text-sm">WiFi</span>
+              </div>
+              <span id="wifi-strength" class="text-lg font-semibold"
+                >-- dBm</span
+              >
+            </div>
+
+            <!-- Garden Control -->
+            <div class="bg-gray-700 p-4 rounded-md">
+              <h3 class="text-sm font-semibold mb-2">💦 Điều khiển tưới</h3>
+              <div class="flex gap-4 justify-between">
+                <button
+                  id="toggle-auto"
+                  class="bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600">
+                  Auto: OFF
+                </button>
+                <button
+                  id="toggle-manual"
+                  class="bg-green-500 px-4 py-2 rounded-md hover:bg-green-600">
+                  Tưới Nước 💧
+                </button>
+              </div>
+            </div>
+            <!-- Trình phát nhạc -->
+
         </div>
       </div>
     </div>

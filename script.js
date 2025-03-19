@@ -189,3 +189,53 @@ const ctx = document.getElementById("energyChart").getContext("2d");
     },
   });
 })();
+
+// Giao diện xem camera
+function toggleFullScreen() {
+  let video = document.getElementById("cameraFeed");
+  if (!document.fullscreenElement) {
+    video.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// Trình phát nhạc
+const audio = document.getElementById("audio-player");
+const playPauseBtn = document.getElementById("play-pause");
+const progressBar = document.getElementById("progress-bar");
+const currentTimeEl = document.getElementById("current-time");
+const totalTimeEl = document.getElementById("total-time");
+const volumeSlider = document.getElementById("volume-slider");
+
+audio.addEventListener("loadedmetadata", () => {
+  totalTimeEl.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener("timeupdate", () => {
+  progressBar.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+});
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+}
+
+playPauseBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    playPauseBtn.innerHTML =
+      '<i data-lucide="pause" class="w-6 h-6 text-white"></i>';
+  } else {
+    audio.pause();
+    playPauseBtn.innerHTML =
+      '<i data-lucide="play" class="w-6 h-6 text-white"></i>';
+  }
+  lucide.createIcons();
+});
+
+volumeSlider.addEventListener("input", () => {
+  audio.volume = volumeSlider.value;
+});
