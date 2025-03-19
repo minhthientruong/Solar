@@ -19,7 +19,7 @@
     <div
       class="relative min-h-screen flex items-center justify-center p-2 md:p-4 bg-gradient-to-br from-green-700 to-purple-600">
       <div
-        class="w-full max-w-7xl rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
+        class="w-full max-w-full rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
         <!-- Sidebar -->
         <div id="sidebar" class="w-ful md:w-24 md:pr-4 mb-4 md:mb-0">
           <div
@@ -191,39 +191,23 @@
             <div class="justify-center items-center md:items-start p-4">
               <!-- Bật tăt đèn -->
               <!-- Card 1: Kitchen Lights -->
-              <div class="bg-black/20 shadow-lg rounded-lg p-4 w-full max-w-sm">
-                <div class="flex items-center space-x-4">
-                  <div class="w-12 h-12">
-                    <img
-                      src="assets/img/3dKitchenLight.png"
-                      alt="Kitchen Light"
-                      class="w-full h-full" />
-                  </div>
-                  <div>
-                    <div class="text-lg font-semibold text-white">
-                      Bedroom Lights
-                    </div>
-                    <div id="brightness-value-1" class="text-gray-400 text-sm">
-                      71%
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer"
-                  id="slider-container-1">
-                  <div
-                    id="slider-fill-1"
-                    class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-blue-400 rounded-lg"
-                    style="width: 71%"></div>
-                  <input
-                    id="brightness-slider-1"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="71"
-                    class="absolute top-0 left-0 w-full h-full opacity-0" />
-                </div>
-              </div>
+      <div class="bg-black/20 shadow-lg rounded-lg p-4 w-full max-w-sm">
+  <div class="flex items-center space-x-4">
+    <div class="w-12 h-12">
+      <img src="assets/img/3dKitchenLight.png" alt="Kitchen Light" class="w-full h-full" />
+    </div>
+    <div>
+      <div class="text-lg font-semibold text-white">Bedroom Lights</div>
+      <div id="brightness-value" class="text-gray-400 text-sm">50%</div>
+    </div>
+  </div>
+
+  <!-- Thanh Slider -->
+  <div class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer" id="slider-container">
+    <div id="slider-fill" class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-blue-400 rounded-lg" style="width: 50%"></div>
+    <input id="brightness-slider" type="range" min="0" max="100" value="50" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
+  </div>
+</div>
 
               <!-- Card 2: Living Room Lights -->
               <div

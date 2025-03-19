@@ -199,3 +199,43 @@ function toggleFullScreen() {
     document.exitFullscreen();
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const door = document.querySelector("img[src='assets/img/door-garage.png']");
+  const btnUp = document.getElementById("open-door");
+  const btnDown = document.getElementById("close-door");
+  const btnPause = document.querySelector(".bg-red-900"); // Nút dừng
+
+  let position = 0; // Vị trí hiện tại của cửa
+  let direction = 0; // 1 = lên, -1 = xuống, 0 = dừng
+  let animationFrame;
+
+  function moveDoor() {
+    if (direction !== 0) {
+      position += direction * 2; // Tăng giảm vị trí
+      door.style.transform = `translateY(${position}px)`;
+
+      if (position > 50) position = 50; // Giới hạn cửa không đi quá cao
+      if (position < -100) position = -100; // Giới hạn cửa không đi quá thấp
+
+      animationFrame = requestAnimationFrame(moveDoor);
+    }
+  }
+
+  btnUp.addEventListener("click", () => {
+    direction = -1;
+    cancelAnimationFrame(animationFrame);
+    moveDoor();
+  });
+
+  btnDown.addEventListener("click", () => {
+    direction = 1;
+    cancelAnimationFrame(animationFrame);
+    moveDoor();
+  });
+
+  btnPause.addEventListener("click", () => {
+    direction = 0;
+    cancelAnimationFrame(animationFrame);
+  });
+});
