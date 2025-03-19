@@ -35,23 +35,35 @@
 //   let glowIntensity = (temperature / 40) * 30;
 //   gaugeTemperature.style.boxShadow = `0 0 ${glowIntensity}px rgba(255, 0, 0, 0.8)`;
 // }
-async function fetchSensorData() {
-  try {
-    let response = await fetch(
-      "https://mqtt1.eoh.io/api/v1/get_data/17c955f0-c03f-49ea-a776-37bb90038cb1"
-    );
-    let data = await response.json();
+const eraWidget = new EraWidget();
+eraWidget.init({
+  needRealtimeConfigs: true,
+  needHistoryConfigs: true,
+  needActions: false, // Không cần hành động (đèn LED)
+  maxRealtimeConfigsCount: 2, // Chỉ lấy nhiệt độ và độ ẩm
+  maxHistoryConfigsCount: 1,
+  minRealtimeConfigsCount: 2,
+  minHistoryConfigsCount: 0,
 
-    let humidity = data.V0 || 0; // Lấy dữ liệu độ ẩm
-    let temperature = data.V1 || 0; // Lấy dữ liệu nhiệt độ
+  // Nhận cấu hình từ widget
+  onConfiguration: (configuration) => {
+    window.configTemp = configuration.realtime_configs[0]; // Nhiệt độ
+    window.configHumi = configuration.realtime_configs[1]; // Độ ẩm
+  },
 
-    updateHumidity(humidity);
-    updateTemperature(temperature);
-  } catch (error) {
-    console.error("Lỗi lấy dữ liệu từ ERA:", error);
-  }
-}
+  // Cập nhật giá trị từ widget
+  onValues: (values) => {
+    if (window.configTemp && window.configHumi) {
+      let temperature = values[window.configTemp.id]?.value ?? "N/A";
+      let humidity = values[window.configHumi.id]?.value ?? "N/A";
 
+      updateHumidity(humidity);
+      updateTemperature(temperature);
+    }
+  },
+});
+
+// Cập nhật độ ẩm
 function updateHumidity(humidity) {
   document.getElementById("humidityValue").innerText = `${humidity}%`;
 
@@ -70,6 +82,7 @@ function updateHumidity(humidity) {
   gaugeHumidity.style.boxShadow = `0 0 ${glowIntensity}px rgba(0, 255, 0, 0.8)`;
 }
 
+// Cập nhật nhiệt độ
 function updateTemperature(temperature) {
   document.getElementById("temperatureValue").innerText = `${temperature}°C`;
 
@@ -87,16 +100,6 @@ function updateTemperature(temperature) {
   let glowIntensity = (temperature / 40) * 30;
   gaugeTemperature.style.boxShadow = `0 0 ${glowIntensity}px rgba(255, 0, 0, 0.8)`;
 }
-
-// Cập nhật dữ liệu mỗi 5 giây
-setInterval(fetchSensorData, 5000);
-
-// Lấy dữ liệu ngay khi trang tải
-fetchSensorData();
-
-// Tự động cập nhật dữ liệu
-setInterval(updateHumidity, 3000);
-setInterval(updateTemperature, 4000);
 
 document.addEventListener("DOMContentLoaded", function () {
   let temperature = 20; // Giá trị nhiệt độ ban đầu

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
 
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -233,25 +233,160 @@
 
 </div>
 <!-- Biểu đồ nhiệt độ độ ẩm -->
-         <div class="col-span-1 sm:col-span-2 lg:col-span-3 mt-2 md:mt-4">
-  <div class="flex justify-between items-center text-xs md:text-sm mb-1 md:mb-2">
-    <div>90kWh</div>
-    <button>↺</button>
-  </div>
-  <div class="h-16 md:h-20 border-b border-gray-600 relative">
-    <!-- Thêm một canvas để Chart.js render đồ thị -->
-    <canvas id="energyChart" class="w-full h-full"></canvas>
-  </div>
-  <div class="flex justify-between text-xs text-gray-400 mt-1">
-    <div>Mon</div>
-    <div>Tue</div>
-    <div>Wed</div>
-    <div>Thu</div>
-    <div>Fri</div>
-    <div>Sat</div>
-    <div>Sun</div>
-  </div>
-</div>
+ <div id="container-live-chart"></div>
+    <script>
+const CHART_HEIGHT = 500;
+const UPDATE_INTERVAL = 2000;
+const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
+
+// Chart configuration object
+const chartConfig = {
+  chart: {
+    height: CHART_HEIGHT,
+  },
+  time: {
+    timezoneOffset: -420, // UTC+7
+  },
+  rangeSelector: {
+    selected: 0,
+    buttonTheme: {
+      width: 50,
+    },
+    buttons: [
+      { type: "minute", count: 1, text: "1 min", title: "View 1 min" },
+      { type: "minute", count: 10, text: "10 min", title: "View 10 min" },
+      { type: "minute", count: 15, text: "15 min", title: "View 15 min" },
+      { type: "minute", count: 30, text: "30 min", title: "View 30 min" },
+      { type: "minute", count: 60, text: "60 min", title: "View 60 min" },
+    ],
+  },
+  plotOptions: {
+    series: {
+      turboThreshold: 10000,
+    },
+  },
+  navigator: {
+    enabled: false,
+  },
+  series: [
+    {
+      name: "Temperature",
+      data: [],
+      color: "#FF5733", // Màu cam cho nhiệt độ
+    },
+    {
+      name: "Humidity",
+      data: [],
+      color: "#3498db", // Màu xanh cho độ ẩm
+    },
+  ],
+};
+
+class TemperatureHumidityChart {
+  constructor() {
+    this.container = document.getElementById("container-live-chart");
+    this.historyTemperature = [];
+    this.historyHumidity = [];
+    this.configTemperature = null;
+    this.configHumidity = null;
+    this.valueTemperature = null;
+    this.valueHumidity = null;
+    this.chart = null;
+    this.eraWidget = null;
+    this.updateInterval = null;
+    this.updatedHistory = false;
+  }
+
+  initialize() {
+    this.setupChart();
+    this.setupEraWidget();
+    this.requestInitialData();
+    this.startUpdates();
+  }
+
+  setupChart() {
+    this.chart = Highcharts.stockChart(this.container, chartConfig);
+    this.container.style.height = `${CHART_HEIGHT}px`;
+  }
+
+  setupEraWidget() {
+    this.eraWidget = new EraWidget();
+    this.eraWidget.init({
+      mobileHeight: CHART_HEIGHT,
+      onConfiguration: (configuration) => {
+        this.configTemperature = configuration.realtime_configs[0];
+        this.configHumidity = configuration.realtime_configs[1];
+      },
+      onValues: (values) => {
+        this.valueTemperature = values[this.configTemperature?.id]?.value || null;
+        this.valueHumidity = values[this.configHumidity?.id]?.value || null;
+      },
+      onHistories: (history) => {
+        if (!this.updatedHistory && history.length >= 2) {
+          this.historyTemperature = history[0].data;
+          this.historyHumidity = history[1].data;
+          this.updateChartData(true);
+          this.updatedHistory = true;
+        } else {
+          console.log("No historical data received");
+        }
+      },
+    });
+  }
+
+  requestInitialData() {
+    const endTime = Date.now();
+    const startTime = endTime - ONE_DAY_AGO;
+    this.eraWidget.requestHistories(startTime, endTime);
+  }
+
+  updateChartData(isInitial = false) {
+    if (this.chart) {
+      if (this.chart.series[0]) {
+        this.chart.series[0].setData(this.historyTemperature, true);
+      }
+      if (this.chart.series[1]) {
+        this.chart.series[1].setData(this.historyHumidity, true);
+      }
+    } else {
+      console.error("Chart or series not initialized");
+    }
+  }
+
+  startUpdates() {
+    this.updateInterval = setInterval(() => {
+      if (this.valueTemperature !== null && this.valueHumidity !== null) {
+        const newTemperaturePoint = [Date.now(), this.valueTemperature];
+        const newHumidityPoint = [Date.now(), this.valueHumidity];
+        this.historyTemperature.push(newTemperaturePoint);
+        this.historyHumidity.push(newHumidityPoint);
+        this.updateChartData();
+      }
+    }, UPDATE_INTERVAL);
+  }
+
+  destroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+    if (this.chart) {
+      this.chart.destroy();
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const chart = new TemperatureHumidityChart();
+  chart.initialize();
+
+  window.addEventListener("unload", () => {
+    chart.destroy();
+  });
+});
+
+
+
+    </script>
 
             <div
               class="col-span-1 sm:col-span-2 row-span-2 bg-gray-700 rounded-2xl overflow-hidden">
