@@ -1,9 +1,62 @@
-function updateHumidity() {
-  let humidity = Math.floor(Math.random() * 101); // Giá trị từ 0 đến 100%
+// function updateHumidity() {
+//   let humidity = Math.floor(Math.random() * 101); // Giá trị từ 0 đến 100%
+//   document.getElementById("humidityValue").innerText = `${humidity}%`;
+
+//   let neonGreen = `rgba(0, 255, 0, 1)`;
+//   let fadeGreen = `rgba(0, 0, 0, 0.3)`; // Màu đen trong suốt nhẹ hơn
+
+//   let gaugeHumidity = document.getElementById("gaugeHumidity");
+//   gaugeHumidity.style.background = `conic-gradient(
+//     ${neonGreen} 0%,
+//     ${neonGreen} ${(humidity / 100) * 100}%,
+//     ${fadeGreen} ${(humidity / 100) * 100}%,
+//     ${fadeGreen} 100%
+//   )`;
+
+//   let glowIntensity = (humidity / 100) * 30;
+//   gaugeHumidity.style.boxShadow = `0 0 ${glowIntensity}px rgba(0, 255, 0, 0.8)`;
+// }
+
+// function updateTemperature() {
+//   let temperature = Math.floor(Math.random() * 41); // Giá trị từ 0 đến 40°C
+//   document.getElementById("temperatureValue").innerText = `${temperature}°C`;
+
+//   let neonRed = `rgba(255, 0, 0, 1)`;
+//   let fadeRed = `rgba(255, 0, 0, 0.1)`;
+
+//   let gaugeTemperature = document.getElementById("gaugeTemperature");
+//   gaugeTemperature.style.background = `conic-gradient(
+//     ${neonRed} 0%,
+//     ${neonRed} ${(temperature / 40) * 100}%,
+//     ${fadeRed} ${(temperature / 40) * 100}%,
+//     ${fadeRed} 100%
+//   )`;
+
+//   let glowIntensity = (temperature / 40) * 30;
+//   gaugeTemperature.style.boxShadow = `0 0 ${glowIntensity}px rgba(255, 0, 0, 0.8)`;
+// }
+async function fetchSensorData() {
+  try {
+    let response = await fetch(
+      "https://mqtt1.eoh.io/api/v1/get_data/17c955f0-c03f-49ea-a776-37bb90038cb1"
+    );
+    let data = await response.json();
+
+    let humidity = data.V0 || 0; // Lấy dữ liệu độ ẩm
+    let temperature = data.V1 || 0; // Lấy dữ liệu nhiệt độ
+
+    updateHumidity(humidity);
+    updateTemperature(temperature);
+  } catch (error) {
+    console.error("Lỗi lấy dữ liệu từ ERA:", error);
+  }
+}
+
+function updateHumidity(humidity) {
   document.getElementById("humidityValue").innerText = `${humidity}%`;
 
   let neonGreen = `rgba(0, 255, 0, 1)`;
-  let fadeGreen = `rgba(0, 0, 0, 0.3)`; // Màu đen trong suốt nhẹ hơn
+  let fadeGreen = `rgba(0, 0, 0, 0.3)`;
 
   let gaugeHumidity = document.getElementById("gaugeHumidity");
   gaugeHumidity.style.background = `conic-gradient(
@@ -17,8 +70,7 @@ function updateHumidity() {
   gaugeHumidity.style.boxShadow = `0 0 ${glowIntensity}px rgba(0, 255, 0, 0.8)`;
 }
 
-function updateTemperature() {
-  let temperature = Math.floor(Math.random() * 41); // Giá trị từ 0 đến 40°C
+function updateTemperature(temperature) {
   document.getElementById("temperatureValue").innerText = `${temperature}°C`;
 
   let neonRed = `rgba(255, 0, 0, 1)`;
@@ -35,6 +87,12 @@ function updateTemperature() {
   let glowIntensity = (temperature / 40) * 30;
   gaugeTemperature.style.boxShadow = `0 0 ${glowIntensity}px rgba(255, 0, 0, 0.8)`;
 }
+
+// Cập nhật dữ liệu mỗi 5 giây
+setInterval(fetchSensorData, 5000);
+
+// Lấy dữ liệu ngay khi trang tải
+fetchSensorData();
 
 // Tự động cập nhật dữ liệu
 setInterval(updateHumidity, 3000);
