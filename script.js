@@ -28,7 +28,7 @@ const eraWidget = new EraWidget();
 eraWidget.init({
   needRealtimeConfigs: true,
   needHistoryConfigs: true,
-  needActions: false, // Không cần hành động (đèn LED)
+  needActions: true, // Không cần hành động (đèn LED)
   maxRealtimeConfigsCount: 2, // Chỉ lấy nhiệt độ và độ ẩm
   maxHistoryConfigsCount: 1,
   minRealtimeConfigsCount: 2,
@@ -38,6 +38,9 @@ eraWidget.init({
   onConfiguration: (configuration) => {
     window.configTemp = configuration.realtime_configs[0]; // Nhiệt độ
     window.configHumi = configuration.realtime_configs[1]; // Độ ẩm
+    window.configBrightness = configuration.realtime_configs.find(
+      (c) => c.datastream === "V2" // Giả sử V2 là độ sáng LED
+    );
   },
 
   // Cập nhật giá trị từ widget
@@ -49,9 +52,29 @@ eraWidget.init({
       updateHumidity(humidity);
       updateTemperature(temperature);
     }
+    if (window.configBrightness) {
+      let brightness = values[window.configBrightness.id]?.value ?? 0;
+      updateBrightness(brightness);
+    }
   },
 });
+// Cập nhật hiển thị giá trị sáng
+function updateBrightness(value) {
+  document.getElementById("brightness-value-2").textContent = `${value}%`;
+  document.getElementById("slider-fill-2").style.width = `${value}%`;
+  document.getElementById("brightness-slider-2").value = value;
+}
 
+// Lắng nghe sự kiện kéo thanh trượt để thay đổi độ sáng LED
+document
+  .getElementById("brightness-slider-2")
+  .addEventListener("input", function () {
+    let brightness = this.value;
+    updateBrightness(brightness);
+
+    // Gửi giá trị mới lên ERa để điều chỉnh LED
+    eraWidget.writeVirtualPin("V2", parseInt(brightness));
+  });
 // Cập nhật độ ẩm
 function updateHumidity(humidity) {
   document.getElementById("humidityValue").innerText = `${humidity}%`;
@@ -121,25 +144,42 @@ document.addEventListener("DOMContentLoaded", function () {
     const brightnessValue = document.getElementById(valueId);
     const sliderContainer = document.getElementById(containerId);
 
-    // Cập nhật giá trị khi kéo slider
-    slider.addEventListener("input", updateSlider);
+    if (!slider || !sliderFill || !brightnessValue || !sliderContainer) {
+      console.error("Không tìm thấy phần tử slider");
+      return;
+    }
 
-    // Cập nhật giá trị khi click trực tiếp vào thanh slider
+    // Cập nhật giá trị khi kéo slider
+    slider.addEventListener("input", function () {
+      updateSlider(slider.value);
+    });
+
+    // Cập nhật giá trị khi click vào thanh slider
     sliderContainer.addEventListener("click", function (event) {
       const rect = sliderContainer.getBoundingClientRect();
       const offsetX = event.clientX - rect.left;
       const newValue = Math.round((offsetX / rect.width) * 100);
 
       slider.value = newValue;
-      updateSlider();
+      updateSlider(newValue);
     });
 
-    function updateSlider() {
-      const value = slider.value;
+    function updateSlider(value) {
       sliderFill.style.width = `${value}%`;
       brightnessValue.textContent = `${value}%`;
+
+      // Gửi giá trị mới lên ERa
+      eraWidget.writeVirtualPin("V2", parseInt(value));
     }
   }
+
+  // Khởi tạo slider
+  setupSlider(
+    "brightness-slider-2",
+    "slider-fill-2",
+    "brightness-value-2",
+    "slider-container-2"
+  );
 
   // Kích hoạt điều khiển cho cả 2 card
   setupSlider(
