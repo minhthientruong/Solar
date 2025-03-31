@@ -25,22 +25,65 @@ setInterval(updateDateTime, 1000);
 updateDateTime(); // Gọi ngay lập tức để tránh độ trễ 1 giây ban đầu
 
 const eraWidget = new EraWidget();
+let onLivingLight = {
+  action: "someActionValue", // Replace with your actual action value
+};
 eraWidget.init({
   needRealtimeConfigs: true,
   needHistoryConfigs: true,
-  needActions: true, // Không cần hành động (đèn LED)
-  maxRealtimeConfigsCount: 2, // Chỉ lấy nhiệt độ và độ ẩm
+  needActions: true,
+  maxRealtimeConfigsCount: 2,
   maxHistoryConfigsCount: 1,
   minRealtimeConfigsCount: 2,
   minHistoryConfigsCount: 0,
-
-  // Nhận cấu hình từ widget
+  maxActionsCount: 3, // Add this to specify you need 3 actions
+  minActionsCount: 3, // Add this to ensure you get at least 3 actions
   onConfiguration: (configuration) => {
-    window.configTemp = configuration.realtime_configs[0]; // Nhiệt độ
-    window.configHumi = configuration.realtime_configs[1]; // Độ ẩm
-    window.configBrightness = configuration.realtime_configs.find(
-      (c) => c.datastream === "V2" // Giả sử V2 là độ sáng LED
+    console.log("Configuration received:", configuration);
+    console.log("All available actions:", configuration.actions); // Log all actions
+
+    window.configTemp = configuration.realtime_configs[0];
+    window.configHumi = configuration.realtime_configs[1];
+
+    if (!configuration.actions) {
+      console.warn("No actions received in configuration");
+      return;
+    }
+
+    // Log each action's properties
+    configuration.actions.forEach((action, index) => {
+      console.log(`Action ${index}:`, {
+        name: action.name,
+        type: action.type,
+        action: action.action,
+        properties: action,
+      });
+    });
+
+    // Try multiple ways to find the light action
+    const livingLightAction = configuration.actions.find(
+      (action) =>
+        action.name === "living_light" ||
+        action.type === "light" ||
+        action.name?.includes("light") ||
+        action.type?.includes("light")
     );
+
+    if (livingLightAction) {
+      onLivingLight = livingLightAction;
+      console.log("Found light action:", livingLightAction);
+    } else {
+      console.warn("Living light action not found in configuration");
+      // If no specific light action is found, use the first available action
+      if (configuration.actions.length > 0) {
+        onLivingLight = configuration.actions[0];
+        console.log("Using first available action as fallback:", onLivingLight);
+      } else {
+        onLivingLight = {
+          action: "default_action",
+        };
+      }
+    }
   },
 
   // Cập nhật giá trị từ widget
@@ -52,29 +95,9 @@ eraWidget.init({
       updateHumidity(humidity);
       updateTemperature(temperature);
     }
-    if (window.configBrightness) {
-      let brightness = values[window.configBrightness.id]?.value ?? 0;
-      updateBrightness(brightness);
-    }
   },
 });
-// Cập nhật hiển thị giá trị sáng
-function updateBrightness(value) {
-  document.getElementById("brightness-value-2").textContent = `${value}%`;
-  document.getElementById("slider-fill-2").style.width = `${value}%`;
-  document.getElementById("brightness-slider-2").value = value;
-}
 
-// Lắng nghe sự kiện kéo thanh trượt để thay đổi độ sáng LED
-document
-  .getElementById("brightness-slider-2")
-  .addEventListener("input", function () {
-    let brightness = this.value;
-    updateBrightness(brightness);
-
-    // Gửi giá trị mới lên ERa để điều chỉnh LED
-    eraWidget.writeVirtualPin("V2", parseInt(brightness));
-  });
 // Cập nhật độ ẩm
 function updateHumidity(humidity) {
   document.getElementById("humidityValue").innerText = `${humidity}%`;
@@ -138,62 +161,39 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 document.addEventListener("DOMContentLoaded", function () {
-  function setupSlider(sliderId, fillId, valueId, containerId) {
-    const slider = document.getElementById(sliderId);
-    const sliderFill = document.getElementById(fillId);
-    const brightnessValue = document.getElementById(valueId);
-    const sliderContainer = document.getElementById(containerId);
+  const sliderLivingRoom = document.querySelector("#brightness-slider-2");
+  const valueLivingRoom = document.querySelector("#brightness-value-2");
+  const sliderFillLivingRoom = document.querySelector("#slider-fill-2");
 
-    if (!slider || !sliderFill || !brightnessValue || !sliderContainer) {
-      console.error("Không tìm thấy phần tử slider");
-      return;
-    }
-
-    // Cập nhật giá trị khi kéo slider
-    slider.addEventListener("input", function () {
-      updateSlider(slider.value);
-    });
-
-    // Cập nhật giá trị khi click vào thanh slider
-    sliderContainer.addEventListener("click", function (event) {
-      const rect = sliderContainer.getBoundingClientRect();
-      const offsetX = event.clientX - rect.left;
-      const newValue = Math.round((offsetX / rect.width) * 100);
-
-      slider.value = newValue;
-      updateSlider(newValue);
-    });
-
-    function updateSlider(value) {
-      sliderFill.style.width = `${value}%`;
-      brightnessValue.textContent = `${value}%`;
-
-      // Gửi giá trị mới lên ERa
-      eraWidget.writeVirtualPin("V2", parseInt(value));
-    }
+  // Verify all elements are found
+  if (!sliderLivingRoom || !valueLivingRoom || !sliderFillLivingRoom) {
+    console.error("Required DOM elements not found!");
+    return;
   }
 
-  // Khởi tạo slider
-  setupSlider(
-    "brightness-slider-2",
-    "slider-fill-2",
-    "brightness-value-2",
-    "slider-container-2"
-  );
+  // Check if eraWidget exists
+  if (typeof eraWidget === "undefined") {
+    console.error(
+      "eraWidget is not defined - check if the widget script is loaded correctly"
+    );
+    return;
+  }
 
-  // Kích hoạt điều khiển cho cả 2 card
-  setupSlider(
-    "brightness-slider-1",
-    "slider-fill-1",
-    "brightness-value-1",
-    "slider-container-1"
-  );
-  setupSlider(
-    "brightness-slider-2",
-    "slider-fill-2",
-    "brightness-value-2",
-    "slider-container-2"
-  );
+  sliderLivingRoom.addEventListener("input", function () {
+    const value = parseFloat(this.value);
+    sliderFillLivingRoom.style.width = value + "%";
+    valueLivingRoom.textContent = value + "%";
+
+    if (onLivingLight && onLivingLight.action) {
+      try {
+        eraWidget.triggerAction(onLivingLight.action, null, { value: value });
+      } catch (error) {
+        console.error("Error triggering action:", error);
+      }
+    } else {
+      console.error("onLivingLight or onLivingLight.action is not defined");
+    }
+  });
 });
 
 // Đo nhiệt độ
