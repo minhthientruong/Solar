@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Highcharts Gantt -->
+    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+
+    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+    <script src="https://code.highcharts.com/gantt/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/gantt/modules/accessibility.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-gray-100 max-w-full mx-auto px-4 min-h-screen">
+    <div>
+      <div class="mx-auto p-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center space-x-4">
+            <a href="index.html">
+              <img src="assets/img/logo-era.png" alt="ERa Logo" width="100" />
+            </a>
+          </div>
+
+          <!-- Hamburger menu - hiển thị trên màn hình nhỏ -->
+          <div class="sm:hidden">
+            <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+              <!-- Icon hamburger -->
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Navigation links -->
+          <div id="menu" class="hidden sm:flex space-x-4">
+            <a
+              href="index.html"
+              class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+              Overview
+            </a>
+            <a
+              href="analytics.html"
+              class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+              Analytics
+            </a>
+            <a href="#" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+              Monitoring
+            </a>
+          </div>
+        </div>
+
+        <!-- Dropdown menu for mobile -->
+        <div id="mobile-menu" class="sm:hidden hidden flex-col space-y-2">
+          <a
+            href="index.html"
+            class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+            Overview
+          </a>
+          <a
+            href="analytics.html"
+            class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+            Analytics
+          </a>
+          <a
+            href="#"
+            class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+            Monitoring
+          </a>
+        </div>
+      </div>
+      <div id="container" class="mb-10"></div>
+
+      <a
+        href="index.html"
+        class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700 transition">
+        ← Back to Dashboard
+      </a>
+    </div>
+    <!-- Dùng script chung -->
+
+    <script src="chartgant.js"></script>
+  </body>
+</html>
