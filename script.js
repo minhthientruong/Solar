@@ -428,6 +428,9 @@ window.onload = () => {
 
 // Tính tiền điện
 // --- MẪU DỮ LIỆU (thay bằng fetch từ ESP32) ---
+const CHART_HEIGHT = 700;
+const UPDATE_INTERVAL = 2000;
+const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
 const dailyData = [
   { date: "2025-04-10", wh: 12000 },
   { date: "2025-04-11", wh: 8000 },
@@ -440,6 +443,9 @@ const dailyData = [
 
 // Khởi tạo chart với format label và tooltip
 const chart = Highcharts.chart("historyChart", {
+  chart: {
+    height: CHART_HEIGHT,
+  },
   chart: { type: "column" },
   title: { text: "Tiêu thụ điện theo ngày" },
   xAxis: { categories: [], crosshair: true },
