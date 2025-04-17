@@ -1,5 +1,12 @@
 {
   "dependencies": {
-    "chart.js": "^4.4.8"
+    "@tailwindcss/vite": "^4.1.4",
+    "chart.js": "^4.4.8",
+    "highcharts": "^12.2.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.4"
   }
 }

@@ -46,8 +46,8 @@
 #define PWM_RESOLUTION 8
 DHT dht(DHTPIN, DHTTYPE);
 
-const char ssid[] = "eoh.io";
-const char pass[] = "Eoh@2020";
+const char ssid[] = "MTA_IOT";
+const char pass[] = "aebinhphuoc";
 ERaEspTime syncTime;
 ERaTimer timer;
 ERaSmart smart(ERa, syncTime);

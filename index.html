@@ -2,632 +2,375 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-<!-- Example - make sure the path is correct -->
-<script src="path/to/era-widget.js"></script>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.highcharts.com/stock/highstock.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script src="https://www.unpkg.com/@eohjsc/era-widget@1.1.3/src/index.js"></script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Home Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Highcharts Gantt -->
+    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+    <script src="https://code.highcharts.com/gantt/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/gantt/modules/accessibility.js"></script>
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css" />
   </head>
+<body class="bg-gray-100 max-w-full  mx-auto px-4 min-h-screen">
+  <div class="p-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4">
+      <!-- Logo -->
+      <div class="flex items-center space-x-4">
+        <img src="assets/img/logo-era.png" alt="ERa Logo" width="100" />
+      </div>
 
-  <body>
-    <div
-      class="relative min-h-screen flex items-center justify-center p-2 md:p-4 bg-gradient-to-br from-green-700 to-purple-600">
-      <div
-        class="w-full max-w-full rounded-3xl p-2 md:p-4 flex flex-col md:flex-row">
-        <!-- Sidebar -->
-        <div id="sidebar" class="w-ful md:w-24 md:pr-4 mb-4 md:mb-0">
-          <div
-            class="flex md:flex-col md:space-y-4 space-x-2 md:space-x-0 justify-between">
-            <button
-              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
-              <i data-lucide="layout-dashboard" class="text-xl mb-1"></i>
-              <span class="hidden md:inline">Dashboard</span>
-            </button>
-            <button
-              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
-              <i data-lucide="user" class="text-xl mb-1"></i>
-              <span class="hidden md:inline">Profile</span>
-            </button>
-            <button
-              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
-              <i data-lucide="shield" class="text-xl mb-1"></i>
-              <span class="hidden md:inline">Security</span>
-            </button>
-            <button
-              class="bg-white/20 hover:bg-white/40 text-white p-2 md:p-4 rounded-2xl flex flex-col items-center text-xs flex-1 md:flex-auto shadow-lg shadow-white/10 backdrop-blur-lg hover:bg-white/20 transition">
-              <i data-lucide="settings" class="text-xl mb-1"></i>
-              <span class="hidden md:inline">Settings</span>
-            </button>
-          </div>
-        </div>
-        <!-- Bố cục điều khiển trung tâm -->
-        <div class="flex-1 rounded-2xl space-y-4 p-2 md:p-4 text-white">
-          <div
-            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
-            <div class="text-center">
-              <div id="time" class="text-xl font-bold"></div>
-              <div id="date" class="text-xs sm:text-sm text-gray-400"></div>
-            </div>
-            <div
-              class="bg-gray-700 rounded-full px-2 md:px-4 py-1 md:py-2 flex items-center w-full sm:w-96">
-              <input
-                type="text"
-                placeholder="Device search..."
-                class="bg-transparent border-none outline-none w-full text-white text-xs md:text-sm" />
-              <span>🔍</span>
-            </div>
-            <div class="text-4xl cursor-pointer hidden sm:block">🔔</div>
-          </div>
-          <div
-            class="bg-white/20 rounded-xl md:rounded-full p-4 md:p-2 mb-4 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:justify-between sm:gap-4">
-            <button
-              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
-              HOME
-            </button>
-            <button
-              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
-              BEDROOM
-            </button>
-            <button
-              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
-              <span class="mx-4"> LIVINGROOM</span>
-            </button>
-            <button
-              class="w-full h-10 md:w-32 md:h-12 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/50 text-black font-medium transition ring-2 ring-transparent focus:ring-white/50 focus:shadow-neon">
-              KITCHEN
-            </button>
-          </div>
-          <!-- Bố cục điều khiển -->
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
-            <div
-              class="rounded-2xl md:p-4 flex flex-col items-center justify-center">
-              <!-- Đồng hồ đo độ ẩm -->
-              <div class="flex flex-col items-center">
-                <div class="text-xl md:mb-6 font-semibold mb-2">Độ Ẩm</div>
-                <div
-                  class="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
-                  <div
-                    id="gaugeHumidity"
-                    class="absolute inset-0 rounded-full p-[5px] gauge-ring"></div>
-                  <div
-                    class="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
-                    <div
-                      class="relative w-28 h-28 sm:w-36 sm:h-36 bg-gray-900 rounded-full flex items-center justify-center shadow-lg">
-                      <span
-                        id="humidityValue"
-                        class="absolute text-lg font-bold text-white z-10"
-                        >--%</span
-                      >
-                    </div>
-                  </div>
-                </div>
-                <button
-                  onclick="updateHumidity()"
-                  class="mt-4 bg-green-600 text-white px-3 py-1 rounded-xl text-xs hover:bg-green-700">
-                  💧 Cập nhật độ ẩm
-                </button>
-              </div>
+      <!-- Hamburger menu - hiển thị trên màn hình nhỏ -->
+      <div class="sm:hidden">
+        <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+          <!-- Icon hamburger -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
 
-              <!-- Đồng hồ đo nhiệt độ -->
-            </div>
-
-            <div
-              class="rounded-2xl md:p-4 my-8 flex flex-col items-center justify-center">
-              <div class="flex flex-col items-center">
-                <div class="text-xl md:mb-6 font-semibold mb-2">Nhiệt Độ</div>
-                <div
-                  class="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
-                  <div
-                    id="gaugeTemperature"
-                    class="absolute inset-0 rounded-full p-[5px] gauge-ring"></div>
-                  <div
-                    class="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
-                    <div
-                      class="relative w-28 h-28 sm:w-36 sm:h-36 bg-gray-900 rounded-full flex items-center justify-center shadow-lg">
-                      <span
-                        id="temperatureValue"
-                        class="absolute text-lg font-bold text-white z-10"
-                        >--°C</span
-                      >
-                    </div>
-                  </div>
-                </div>
-                <button
-                  onclick="updateTemperature()"
-                  class="mt-4 bg-red-600 text-white px-3 py-1 rounded-xl text-xs hover:bg-red-700">
-                  🌡️ Cập nhật nhiệt độ
-                </button>
-              </div>
-            </div>
-            <!-- Điều khiển máy lạnh -->
-            <div
-              class="bg-purple-100 bg-opacity-50 rounded-2xl p-3 md:p-4 relative transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-              <div class="flex justify-between">
-                <div class="text-gray-800 font-semibold text-sm md:text-base">
-                  Air Conditioner
-                </div>
-                <i
-                  data-lucide="circle-power"
-                  class="text-xl mb-1 cursor-pointer"></i>
-              </div>
-
-              <!-- Hiển thị nhiệt độ -->
-              <div class="flex mt-6 justify-center">
-                <div
-                  id="temperature"
-                  class="bg-gradient-to-br from-green-700 to-purple-600 bg-clip-text text-transparent font-bold text-5xl text-center">
-                  20°
-                </div>
-              </div>
-
-              <img
-                src="assets/img/airConditioner.png"
-                alt="Air Conditioner"
-                class="mx-auto w-38 md:w-80 py-2 mt-[-36px]" />
-
-              <!-- Nút tăng giảm nhiệt độ -->
-              <div class="flex justify-center mt-[-36px]">
-                <div class="flex items-center space-x-4">
-                  <button
-                    id="increase-temp"
-                    class="text-sm font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
-                    ➕
-                  </button>
-                  <button
-                    id="decrease-temp"
-                    class="text-sm font-bold bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 active:scale-90 transition-transform duration-150">
-                    ➖
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="justify-center items-center md:items-start p-4">
-              <!-- Bật tăt đèn -->
-              <!-- Card 1: Kitchen Lights -->
-      <div class="bg-black/20 shadow-lg rounded-lg p-4 w-full max-w-sm">
-  <div class="flex items-center space-x-4">
-    <div class="w-12 h-12">
-      <img src="assets/img/3dKitchenLight.png" alt="Kitchen Light" class="w-full h-full" />
+      <!-- Navigation links -->
+      <div id="menu" class="hidden sm:flex space-x-4">
+        <a href="index.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+          Overview
+        </a>
+        <a href="analytics.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+          Analytics
+        </a>
+        <a href="#" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+          Monitoring
+        </a>
+      </div>
     </div>
-    <div>
-      <div class="text-lg font-semibold text-white">Bedroom Lights</div>
-      <div id="brightness-value" class="text-gray-400 text-sm">50%</div>
+
+    <!-- Dropdown menu for mobile -->
+    <div id="mobile-menu" class="sm:hidden hidden flex-col space-y-2">
+      <a href="index.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+        Overview
+      </a>
+      <a href="analytics.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+        Analytics
+      </a>
+      <a href="#" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+        Monitoring
+      </a>
     </div>
   </div>
-
-  <!-- Thanh Slider -->
-  <div class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer" id="slider-container">
-    <div id="slider-fill" class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-blue-400 rounded-lg" style="width: 50%"></div>
-    <input id="brightness-slider" type="range" min="0" max="100" value="50" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
-  </div>
-</div>
-
-              <!-- Card 2: Living Room Lights -->
-              <div
-                class="bg-black/20 md:mt-4 mt-4 shadow-lg rounded-lg p-4 w-full max-w-sm">
-                <div class="flex items-center space-x-4">
-                  <div class="w-12 h-12">
-                    <img
-                      src="assets/img/3dKitchenLight.png"
-                      alt="Kitchen Light"
-                      class="w-full h-full" />
-                  </div>
-                  <div>
-                    <div class="text-lg font-semibold text-white">
-                      Living Room Lights
-                    </div>
-                    <div id="brightness-value-2" class="text-gray-400 text-sm">
-                      0%
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="relative p-5 mt-6 h-2 bg-gray-300 rounded-lg cursor-pointer"
-                  id="slider-container-2">
-                  <div
-                    id="slider-fill-2"
-                    class="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-red-500 rounded-lg"
-                    style="width: 0%"></div>
-                  <input
-                    id="brightness-slider-2"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="50"
-                    class="absolute top-0 left-0 w-full h-full opacity-0" />
-                </div>
-              </div>
-              <div
-                class="w-full max-w-4xl p-4 bg-gray-800 rounded-lg shadow-lg">
-                <!-- Tiêu đề -->
-                <div class="flex justify-between items-center mb-4">
-                  <h2 class="text-sm font-bold flex">
-                    <i
-                      data-lucide="cctv"
-                      class="md:mr-4 text-red-600 mr-2 text-xl mb-1"></i>
-                    Camera
-                  </h2>
-                </div>
-
-                <!-- Khung Camera -->
-                <div class="relative">
-                  <video
-                    id="cameraFeed"
-                    class="w-full rounded-lg shadow-md"
-                    autoplay>
-                    Trình duyệt không hỗ trợ video.
-                  </video>
-
-                  <!-- Nút phóng to -->
-                  <button
-                    onclick="toggleFullScreen()"
-                    class="absolute bottom-1 right-1 bg-black/20 text-white p-1 rounded-full hover:bg-black/50">
-                    <i data-lucide="scan-eye" class="text-xl mb-1"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card 3: mở cửa -->
-            <div
-              class="bg-purple-100 bg-opacity-50 flex flex-col rounded-2xl p-6 md:p-8 relative transition-transform duration-300 hover:shadow-xl sm:col-span-2 lg:col-span-2">
-              <!-- Tiêu đề bên trái -->
-              <div
-                class="text-gray-800 font-semibold text-sm md:text-base mb-4 text-left">
-                DOOR GARAGE
-              </div>
-
-              <!-- Hình ảnh nằm giữa -->
-              <div class="flex flex-col items-center">
-                <img
-                  src="assets/img/door-garage.png"
-                  alt="Door Garage"
-                  class="w-40 md:w-80 py-2 mb-6" />
-
-                <!-- Nút bấm nằm giữa -->
-                <div class="flex space-x-4">
-                  <button
-                    id="open-door"
-                    class="text-sm font-bold bg-gray-900 text-white px-6 py-3 rounded-full shadow-md hover:bg-gray-800 active:scale-90 transition-transform duration-150">
-                <i data-lucide="chevron-up" class="w-6 h-6"></i>
-                  </button>
-                           <button
-                    id="open-door"
-                    class="text-sm font-bold bg-red-900 text-white px-6 py-3 rounded-full shadow-md hover:bg-red-800 active:scale-90 transition-transform duration-150">
-                <i data-lucide="circle-pause" class="w-6 h-6"></i>
-                  </button>
-                  <button
-                    id="close-door"
-                    class="text-sm font-bold bg-gray-900 text-white px-6 py-3 rounded-full shadow-md hover:bg-gray-800 active:scale-90 transition-transform duration-150">
-                                    <i data-lucide="chevron-down" class="w-6 h-6"></i>
-
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Biểu đồ nhiệt độ độ ẩm -->
-          <div id="container-live-chart"></div>
-          <script>
-            const CHART_HEIGHT = 700;
-            const UPDATE_INTERVAL = 2000;
-            const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
-
-            // Chart configuration object
-            const chartConfig = {
-              chart: {
-                height: CHART_HEIGHT,
-              },
-              time: {
-                timezoneOffset: -420, // UTC+7
-              },
-              rangeSelector: {
-                selected: 0,
-                buttonTheme: {
-                  width: 50,
-                },
-                buttons: [
-                  {
-                    type: "minute",
-                    count: 1,
-                    text: "1 min",
-                    title: "View 1 min",
-                  },
-                  {
-                    type: "minute",
-                    count: 10,
-                    text: "10 min",
-                    title: "View 10 min",
-                  },
-                  {
-                    type: "minute",
-                    count: 15,
-                    text: "15 min",
-                    title: "View 15 min",
-                  },
-                  {
-                    type: "minute",
-                    count: 30,
-                    text: "30 min",
-                    title: "View 30 min",
-                  },
-                  {
-                    type: "minute",
-                    count: 60,
-                    text: "60 min",
-                    title: "View 60 min",
-                  },
-                ],
-              },
-              plotOptions: {
-                series: {
-                  turboThreshold: 10000,
-                },
-              },
-              navigator: {
-                enabled: false,
-              },
-              series: [
-                {
-                  name: "Temperature",
-                  data: [],
-                  color: "#FF5733", // Màu cam cho nhiệt độ
-                },
-                {
-                  name: "Humidity",
-                  data: [],
-                  color: "#3498db", // Màu xanh cho độ ẩm
-                },
-              ],
-            };
-
-            class TemperatureHumidityChart {
-              constructor() {
-                this.container = document.getElementById(
-                  "container-live-chart"
-                );
-                this.historyTemperature = [];
-                this.historyHumidity = [];
-                this.configTemperature = null;
-                this.configHumidity = null;
-                this.valueTemperature = null;
-                this.valueHumidity = null;
-                this.chart = null;
-                this.eraWidget = null;
-                this.updateInterval = null;
-                this.updatedHistory = false;
-              }
-
-              initialize() {
-                this.setupChart();
-                this.setupEraWidget();
-                this.requestInitialData();
-                this.startUpdates();
-              }
-
-              setupChart() {
-                this.chart = Highcharts.stockChart(this.container, chartConfig);
-                this.container.style.height = `${CHART_HEIGHT}px`;
-              }
-
-              setupEraWidget() {
-                this.eraWidget = new EraWidget();
-                this.eraWidget.init({
-                  mobileHeight: CHART_HEIGHT,
-                  onConfiguration: (configuration) => {
-                    this.configTemperature = configuration.realtime_configs[0];
-                    this.configHumidity = configuration.realtime_configs[1];
-                  },
-                  onValues: (values) => {
-                    this.valueTemperature =
-                      values[this.configTemperature?.id]?.value || null;
-                    this.valueHumidity =
-                      values[this.configHumidity?.id]?.value || null;
-                  },
-                  onHistories: (history) => {
-                    if (!this.updatedHistory && history.length >= 2) {
-                      this.historyTemperature = history[0].data;
-                      this.historyHumidity = history[1].data;
-                      this.updateChartData(true);
-                      this.updatedHistory = true;
-                    } else {
-                      console.log("No historical data received");
-                    }
-                  },
-                });
-              }
-
-              requestInitialData() {
-                const endTime = Date.now();
-                const startTime = endTime - ONE_DAY_AGO;
-                this.eraWidget.requestHistories(startTime, endTime);
-              }
-
-              updateChartData(isInitial = false) {
-                if (this.chart) {
-                  if (this.chart.series[0]) {
-                    this.chart.series[0].setData(this.historyTemperature, true);
-                  }
-                  if (this.chart.series[1]) {
-                    this.chart.series[1].setData(this.historyHumidity, true);
-                  }
-                } else {
-                  console.error("Chart or series not initialized");
-                }
-              }
-
-              startUpdates() {
-                this.updateInterval = setInterval(() => {
-                  if (
-                    this.valueTemperature !== null &&
-                    this.valueHumidity !== null
-                  ) {
-                    const newTemperaturePoint = [
-                      Date.now(),
-                      this.valueTemperature,
-                    ];
-                    const newHumidityPoint = [Date.now(), this.valueHumidity];
-                    this.historyTemperature.push(newTemperaturePoint);
-                    this.historyHumidity.push(newHumidityPoint);
-                    this.updateChartData();
-                  }
-                }, UPDATE_INTERVAL);
-              }
-
-              destroy() {
-                if (this.updateInterval) {
-                  clearInterval(this.updateInterval);
-                }
-                if (this.chart) {
-                  this.chart.destroy();
-                }
-              }
-            }
-
-            document.addEventListener("DOMContentLoaded", () => {
-              const chart = new TemperatureHumidityChart();
-              chart.initialize();
-
-              window.addEventListener("unload", () => {
-                chart.destroy();
-              });
-            });
-          </script>
-
+        <!-- EM2M Energy Meter Readings -->
+        <div class="p-8 rounded-lg  shadow-md mt-6">
+          <h2 class="text-lg font-bold text-gray-700 mb-4">
+            Thông số Đồng hồ điện EM2M
+          </h2>
           <div
-            class="col-span-1 sm:col-span-2 row-span-2 bg-gray-700 rounded-2xl overflow-hidden">
-            <div class="h-32 sm:h-40 md:h-48 relative">
-              <h2 class="text-sm font-bold flex">
-                <i
-                  data-lucide="cctv"
-                  class="md:mx-4 text-red-600 mr-2 text-xl mb-1"></i>
-                Camera Giám Sát
-              </h2>
-            </div>
-            <div class="px-2  md:px-4 py-1 md:py-2">
-              <div
-                class="h-1 md:h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 to-purple-500 rounded-full relative mb-2 md:mb-4">
-                <div
-                  class="absolute w-3 h-3 md:w-4 md:h-4 bg-gray-700 border-2 border-white rounded-full top-1/2 left-3/4 transform -translate-y-1/2 -translate-x-1/2"></div>
+            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
+            <div class="p-2 border rounded">
+              <div class="text-sm text-gray-500">Điện áp</div>
+              <div class="text-2xl font-bold text-blue-600" id="voltageValue">
+                220 V
               </div>
-              <div class="grid grid-cols-3 gap-1 md:gap-2">
-                <button
-                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                  <span class="text-base md:text-lg mb-0 md:mb-1">🛋️</span>
-                  <span class="text-xs">Living room</span>
-                </button>
-                <button
-                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                  <span class="text-base md:text-lg mb-0 md:mb-1">🛏️</span>
-                  <span class="text-xs">Bedroom</span>
-                </button>
-                <button
-                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                  <span class="text-base md:text-lg mb-0 md:mb-1">👶</span>
-                  <span class="text-xs">Children's</span>
-                </button>
-                <button
-                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                  <span class="text-base md:text-lg mb-0 md:mb-1">🍳</span>
-                  <span class="text-xs">Kitchen</span>
-                </button>
-                <button
-                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                  <span class="text-base md:text-lg mb-0 md:mb-1">🚿</span>
-                  <span class="text-xs">Bathroom</span>
-                </button>
-                <button
-                  class="bg-gray-200 text-gray-800 p-1 md:p-2 rounded-xl flex flex-col items-center text-xs">
-                  <span class="text-base md:text-lg mb-0 md:mb-1">🚗</span>
-                  <span class="text-xs">Garage</span>
-                </button>
+              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                <div id="voltageProgress" class="bg-blue-500 h-full"></div>
+              </div>
+            </div>
+            <div class="p-2 border rounded">
+              <div class="text-sm text-gray-500">Dòng điện</div>
+              <div class="text-2xl font-bold text-green-600" id="currentValue">
+                10 A
+              </div>
+              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                <div id="currentProgress" class="bg-green-500 h-full"></div>
+              </div>
+            </div>
+            <div class="p-2 border rounded">
+              <div class="text-sm text-gray-500">Công suất</div>
+              <div class="text-2xl font-bold text-yellow-500" id="powerValue">
+                2200 W
+              </div>
+              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                <div id="powerProgress" class="bg-yellow-500 h-full"></div>
+              </div>
+            </div>
+            <div class="p-2 border rounded">
+              <div class="text-sm text-gray-500">Tần số</div>
+              <div
+                class="text-2xl font-bold text-purple-600"
+                id="frequencyValue">
+                50 Hz
+              </div>
+              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                <div id="frequencyProgress" class="bg-purple-500 h-full"></div>
+              </div>
+            </div>
+            <div class="p-2 border rounded">
+              <div class="text-sm text-gray-500">Hệ số công suất</div>
+              <div
+                class="text-2xl font-bold text-red-500"
+                id="powerFactorValue">
+                0.9
+              </div>
+              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                <div id="powerFactorProgress" class="bg-red-500 h-full"></div>
+              </div>
+            </div>
+            <div class="p-2 border rounded">
+              <div class="text-sm text-gray-500">Điện năng tiêu thụ</div>
+              <div class="text-2xl font-bold text-indigo-500" id="energyValue">
+                500 kWh
+              </div>
+              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                <div id="energyProgress" class="bg-indigo-500 h-full"></div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Trạng thái  -->
+        <div>
+          <!-- See Full Report Button -->
+          <button
+            id="openModalBtn"
+            class="text-yellow-700 font-semibold hover:bg-yellow-600 hover:text-white neon-card p-4 mt-6 transition-all hover:scale-105 bg-transparent text-white py-2 px-4 rounded-lg">
+           Xem chi tiết báo cáo          </button>
 
-        <div
-          class="bg-gray-200 max-h-auto text-white flex justify-center ">
-          <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-4">
-              <button
-                class="text-gray-400 hover:text-white"
-                onclick="fetchWeather()">
-                <i data-lucide="refresh-cw" class="w-6 h-6"></i>
+          <!-- ✅ MODAL -->
+          <div
+            id="fullReportModal"
+            class="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center hidden">
+            <div
+           class="bg-white/50 backdrop-blur-md rounded-lg shadow-lg p-12 w-full max-w-3xl relative">              <button
+                id="closeModalBtn"
+                class="absolute top-2 right-2 text-gray-600  hover:text-pink-500 text-4xl">
+                &times;
               </button>
-            </div>
-
-            <!-- Weather Info -->
-            <div class="grid grid-cols-2 gap-4 mb-6">
-              <div
-                class="flex flex-col items-center p-3 bg-gray-700 rounded-md">
-                <i data-lucide="cloud-sun" class="w-6 h-6 text-white-400"></i>
-                <span class="text-sm">Weather</span>
-                <span id="temperature" class="text-lg font-semibold">--°C</span>
+              <h3 class="text-2xl font-bold mb-4 text-center">
+                Báo cáo chi tiết thông số
+              </h3>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div>
+                  <p class="text-gray-500 text-sm">Điện áp</p>
+                  <p class="text-lg font-semibold" id="modalVoltage">-- V</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-sm">Dòng điện</p>
+                  <p class="text-lg font-semibold" id="modalCurrent">-- A</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-sm">Công suất</p>
+                  <p class="text-lg font-semibold" id="modalPower">-- W</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-sm">Tần số</p>
+                  <p class="text-lg font-semibold" id="modalFrequency">-- Hz</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-sm">Hệ số công suất</p>
+                  <p class="text-lg font-semibold" id="modalPowerFactor">--</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-sm">Điện năng tiêu thụ</p>
+                  <p class="text-lg font-semibold" id="modalEnergy">-- kWh</p>
+                </div>
               </div>
 
-              <div
-                class="flex flex-col items-center p-3 bg-gray-700 rounded-md">
-                <i data-lucide="zap" class="w-6 h-6 text-green-400"></i>
-                <span class="text-sm">Điện năng</span>
-                <span id="wind-speed" class="text-lg font-semibold"
-                  >-- kW/h</span
-                >
-              </div>
+              <!-- Button to download the report -->
+              <button
+                id="downloadReportBtn"
+                class="mt-6 bg-blue-500 bg-white text-pink-600 hover:bg-pink-600 stroke-current hover:text-white py-2 px-4 rounded-lg w-full">
+              Tải xuống báo cáo
+            </button>
             </div>
-
-            <!-- WiFi Status -->
-            <div
-              class="flex items-center justify-between p-3 bg-gray-700 rounded-md mb-4">
-              <div class="flex items-center space-x-2">
-                <i
-                  data-lucide="wifi"
-                  id="wifi-icon"
-                  class="w-6 h-6 text-green-400"></i>
-                <span class="text-sm">WiFi</span>
-              </div>
-              <span id="wifi-strength" class="text-lg font-semibold"
-                >-- dBm</span
-              >
-            </div>
-
-            <!-- Garden Control -->
-            <div class="bg-gray-700 p-4 rounded-md">
-              <h3 class="text-sm font-semibold mb-2">💦 Điều khiển tưới</h3>
-              <div class="flex gap-4 justify-between">
-                <button
-                  id="toggle-auto"
-                  class="bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600">
-                  Auto: OFF
-                </button>
-                <button
-                  id="toggle-manual"
-                  class="bg-green-500 px-4 py-2 rounded-md hover:bg-green-600">
-                  Tưới Nước 💧
-                </button>
-              </div>
-            </div>
-            <!-- Trình phát nhạc -->
-
+          </div>
         </div>
       </div>
     </div>
-    <script src="script.js"></script>
 
-    <script>
-      lucide.createIcons();
-    </script>
+    <div class="grid mt-8 grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="bg-white font-sans p-6">
+
+  <div class="max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">History</h2>
+
+    <!-- Controls -->
+    <div class="flex flex-wrap items-center gap-4 mb-6">
+      <label class="flex flex-col text-xs text-gray-600">
+        From
+        <input type="date" id="fromDate" class="border-gray-300 rounded p-2 text-sm"/>
+      </label>
+      <label class="flex flex-col text-xs text-gray-600">
+        To
+        <input type="date" id="toDate" class="border-gray-300 rounded p-2 text-sm"/>
+      </label>
+      <label class="flex items-center text-xs text-gray-600 space-x-2">
+        <span>Price (₫/kWh)</span>
+        <input type="number" id="priceInput" value="3000" class="border-gray-300 rounded p-2 w-24 text-sm"/>
+      </label>
+      <button
+        id="updateBtn"
+        class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm"
+      >
+        Update
+      </button>
+    </div>
+
+    <!-- Chart Container -->
+    <div id="historyChart" class="w-full h-96"></div>
+  </div>
+      </div>
+      <!-- Center Panel -->
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-gray-700 text-lg font-bold">Meevis Nederweert</div>
+          <i class="fas fa-search text-gray-500"></i>
+        </div>
+        <img
+          alt="House with solar panels"
+          class="rounded-lg mb-4"
+          height="400"
+          src="https://storage.googleapis.com/a1aa/image/uO_hbXEFKzReJAQoKcsebkVjluiyTbIYuTtvlFTzKZo.jpg"
+          width="600" />
+        <div class="text-gray-700 text-lg font-bold mb-2">Maxi Family YMCA</div>
+        <div class="text-gray-500 text-sm mb-2">ID: 449836</div>
+        <div class="text-gray-500 text-sm mb-2">About: SunLux</div>
+        <div class="text-gray-500 text-sm mb-2">
+          Installation Date: Nov 12, 2020
+        </div>
+        <div class="text-gray-500 text-sm mb-2">
+          Address: Geheugden 3-A, 6031 Nederweert, Netherlands
+        </div>
+        <div class="text-2xl font-bold text-gray-700">2.74 kWp</div>
+        <div class="flex justify-between items-center mt-4">
+          <i class="fas fa-info-circle text-gray-500"></i>
+          <i class="fas fa-cog text-gray-500"></i>
+          <i class="fas fa-bell text-gray-500"></i>
+          <i class="fas fa-download text-gray-500"></i>
+        </div>
+      </div>
+      <!-- Right Panel -->
+
+
+          <!-- Date Range Display -->
+
+
+          <!-- Production Section -->
+          <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+            <div class="text-gray-500 mb-2">Sản xuất</div>
+            <div
+              class="text-2xl font-bold text-gray-700 mb-2"
+              id="productionValue">
+              28.5 kW
+            </div>
+            <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
+            <div class="text-gray-500 text-sm mb-2">0.00 kWh</div>
+            <div class="bg-gray-300 h-2 rounded-lg overflow-hidden">
+              <div class="bg-black h-full w-full"></div>
+            </div>
+          </div>
+
+          <!-- Consumption Section -->
+          <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+            <div class="text-gray-500 mb-2">Tiêu thụ</div>
+            <div
+              class="text-2xl font-bold text-gray-700 mb-2"
+              id="consumptionValue">
+              56.46 kW
+            </div>
+            <div class="text-gray-500 text-sm mb-2">28.25 kWh</div>
+            <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
+            <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+              <div class="bg-yellow-500 h-full w-1/2"></div>
+            </div>
+          </div>
+
+          <!-- Power and Energy Section -->
+          <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+            <div class="text-gray-500 mb-2">Công suất</div>
+            <div class="flex justify-between items-center mb-4">
+              <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+                Công suất
+              </button>
+              <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+                Năng lượng
+              </button>
+            </div>
+
+            <!-- Power and energy details -->
+            <div class="grid grid-cols-3 gap-2">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-700">7.5 kW</div>
+                <div class="text-gray-500 text-sm">0:00</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-700">5 kW</div>
+                <div class="text-gray-500 text-sm">2:30</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
+                <div class="text-gray-500 text-sm">5:00</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-700">0 kW</div>
+                <div class="text-gray-500 text-sm">7:30</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
+                <div class="text-gray-500 text-sm">10:00</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-700">5 kW</div>
+                <div class="text-gray-500 text-sm">12:30</div>
+              </div>
+            </div>
+            <div class="text-gray-500 text-sm mt-4">
+              Tổng năng lượng sản xuất được là 28.25 kWh từ năng lượng mặt trời
+              và 28.22 kWh từ lưới điện.
+            </div>
+          </div>
+
+          <!-- Electricity Price Input -->
+          <div class="bg-white p-4 rounded-lg shadow-md mt-6">
+            <div class="mb-4">
+              <label for="priceInput" class="block text-gray-700 text-sm"
+                >Đơn giá (đ/1kWh):</label
+              >
+              <input
+                type="number"
+                id="priceInput"
+                class="border border-gray-300 p-2 rounded w-full"
+                placeholder="Nhập đơn giá"
+                onchange="updateElectricityCost()" />
+            </div>
+            <div class="mb-4">
+              <button
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                onclick="calculateElectricityCost()">
+                Cập nhật hóa đơn điện
+              </button>
+            </div>
+            <div id="electricityCostResult" class="mt-4"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+<script>
+
+
+</script>
+
+    <!-- Custom Script -->
+    <script src="script.js">  </script>
+
+
   </body>
+
 </html>

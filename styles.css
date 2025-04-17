@@ -11,7 +11,13 @@
   width: 100%;
   max-height: fit-content;
 }
-
+#container {
+  max-width: 800px;
+  margin: 1em auto;
+}
+.body {
+  font-family: "Roboto", sans-serif;
+}
 /* Header */
 .card-header {
   display: flex;
@@ -104,4 +110,26 @@ input[type="range"] {
   height: 100%;
   opacity: 0.01; /* Thay vì 0 để tránh mất pointer event */
   cursor: pointer;
+}
+
+/* Hiệu ứng đẹp neon */
+/* styles.css */
+@keyframes neonPulse {
+  0% {
+    box-shadow: 0 0 5px #ffa600, 0 0 10px #ffa600, 0 0 20px #ffa600;
+  }
+  50% {
+    box-shadow: 0 0 10px #ffa600, 0 0 20px #ffa600, 0 0 30px #ffa600;
+  }
+  100% {
+    box-shadow: 0 0 5px #ffa600, 0 0 10px #ffa600, 0 0 20px #ffa600;
+  }
+}
+
+.neon-card {
+  border: 2px solid #ee642d;
+  animation: neonPulse 2s infinite;
+  border-radius: 1rem;
+  background-color: #0e0e0e;
+  color: white;
 }
