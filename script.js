@@ -428,20 +428,27 @@ window.onload = () => {
 
 // Tính tiền điện
 // --- MẪU DỮ LIỆU (thay bằng fetch từ ESP32) ---
-const CHART_HEIGHT = 700;
-const UPDATE_INTERVAL = 2000;
-const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
+// Giả lập dữ liệu từ ESP hoặc DB
 const dailyData = [
-  { date: "2025-04-10", wh: 12000 },
-  { date: "2025-04-11", wh: 8000 },
-  { date: "2025-04-12", wh: 15000 },
-  { date: "2025-04-13", wh: 6000 },
-  { date: "2025-04-14", wh: 18000 },
-  { date: "2025-04-15", wh: 10000 },
-  { date: "2025-04-16", wh: 14000 },
+  { date: "2025-04-11", wh: 32000 },
+  { date: "2025-04-12", wh: 1600 },
+  { date: "2025-04-13", wh: 1000 },
+  { date: "2025-04-14", wh: 2200 },
+  { date: "2025-04-15", wh: 1200 },
+  { date: "2025-04-16", wh: 2600 },
+  { date: "2025-04-17", wh: 900 },
+  { date: "2025-04-18", wh: 1800 },
+  { date: "2025-04-19", wh: 1200 },
+  { date: "2025-04-21", wh: 1500 },
+  { date: "2025-04-22", wh: 1100 },
+  { date: "2025-04-23", wh: 1800 },
+  { date: "2025-04-24", wh: 2000 },
 ];
 
 // Khởi tạo chart với format label và tooltip
+const CHART_HEIGHT = 700;
+const UPDATE_INTERVAL = 2000;
+const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
 const chart = Highcharts.chart("historyChart", {
   chart: {
     height: CHART_HEIGHT,
@@ -451,17 +458,18 @@ const chart = Highcharts.chart("historyChart", {
   xAxis: { categories: [], crosshair: true },
   yAxis: [
     {
-      // Wh/ngày
-      labels: { format: "{value} Wh" },
-      title: { text: "Wh/ngày" },
+      labels: {
+        formatter: function () {
+          return (this.value / 1000).toFixed(1) + " kWh"; // Chia 1000 và hiển thị 1 chữ số sau dấu phẩy
+        },
+      },
+      title: { text: "kWh / ngày" },
     },
     {
-      // Chi phí (₫)
       title: { text: "Chi phí (₫)" },
       labels: {
-        // formatter cho axis labels
         formatter: function () {
-          return Highcharts.numberFormat(this.value, 0, ",", ".") + " ₫";
+          return Highcharts.numberFormat(this.value, 0, ",", ".") + " ₫";
         },
       },
       opposite: true,
@@ -469,7 +477,6 @@ const chart = Highcharts.chart("historyChart", {
   ],
   tooltip: {
     shared: true,
-    // custom tooltip formatter
     formatter: function () {
       let s = `<b>${this.x}</b><br/>`;
       this.points.forEach((pt) => {
@@ -479,23 +486,22 @@ const chart = Highcharts.chart("historyChart", {
             0,
             ",",
             "."
-          )} ₫</b><br/>`;
+          )} ₫</b><br/>`;
         } else {
-          s += `${pt.series.name}: <b>${pt.y} Wh</b><br/>`;
+          s += `${pt.series.name}: <b>${(pt.y / 1000).toFixed(1)} kWh</b><br/>`; // Hiển thị 1 chữ số sau dấu phẩy
         }
       });
       return s;
     },
   },
   series: [
-    { name: "Tiêu thụ (Wh)", type: "column", data: [] },
+    { name: "Tiêu thụ (kWh)", type: "column", data: [] },
     { name: "Chi phí", type: "spline", yAxis: 1, data: [] },
   ],
 });
 
-// Hàm cập nhật chart
 function updateChart() {
-  const price = Number(document.getElementById("priceInput").value); // ₫/kWh
+  const price = Number(document.getElementById("priceInput").value);
   const from = Date.parse(document.getElementById("fromDate").value);
   const to = Date.parse(document.getElementById("toDate").value);
 
@@ -512,6 +518,7 @@ function updateChart() {
       month: "2-digit",
     });
   });
+
   const cons = filtered.map((d) => d.wh);
   const costs = filtered.map((d) => Math.round((d.wh / 1000) * price));
 
@@ -520,23 +527,150 @@ function updateChart() {
   chart.series[1].setData(costs);
 }
 
-// Khởi tạo ngày và chart lần đầu
-(function init() {
-  const to = new Date(),
-    from = new Date(to.getTime() - 6 * 24 * 3600 * 1000);
+function showReport() {
+  const price = Number(document.getElementById("priceInput").value);
+  const from = document.getElementById("fromDate").value;
+  const to = document.getElementById("toDate").value;
+
+  const filtered = dailyData.filter((d) => {
+    const t = Date.parse(d.date);
+    return t >= Date.parse(from) && t <= Date.parse(to);
+  });
+
+  const totalWh = filtered.reduce((sum, d) => sum + d.wh, 0);
+  const totalKwh = (totalWh / 1000).toFixed(1); // Chuyển đổi tổng Wh thành kWh
+  const totalCost = Math.round((totalWh / 1000) * price);
+
+  const rows = filtered
+    .map((d) => {
+      const cost = Math.round((d.wh / 1000) * price);
+      const dateLabel = new Date(d.date).toLocaleDateString("vi-VN");
+      const kwh = (d.wh / 1000).toFixed(1); // Chuyển đổi Wh thành kWh và làm tròn
+      return `<tr>
+        <td class="border px-2 py-1">${dateLabel}</td>
+        <td class="border px-2 py-1 text-right">${kwh} kWh</td>
+        <td class="border px-2 py-1 text-right">${cost.toLocaleString(
+          "vi-VN"
+        )} ₫</td>
+      </tr>`;
+    })
+    .join("");
+
+  document.getElementById("reportContent").innerHTML = `
+    <div class="flex items-center justify-between mb-4">
+    <img src="assets/img/logo-era.png" alt="Logo" class="h-12">
+    <div class="text-right">
+      <p><strong>Khách hàng:</strong> Nguyễn Văn A</p>
+      <p><strong>Mã KH:</strong> 123456789</p>
+    </div>
+  </div>
+    <p><strong>Khoảng thời gian:</strong> ${from} đến ${to}</p>
+    <p><strong>Giá điện:</strong> ${price.toLocaleString("vi-VN")} ₫/kWh</p>
+    <table class="w-full border mt-2 text-sm">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="border px-2 py-1 text-left">Ngày</th>
+          <th class="border px-2 py-1 text-right">Tiêu thụ</th>
+          <th class="border px-2 py-1 text-right">Chi phí</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+      <tfoot>
+        <tr class="bg-gray-50 font-semibold">
+          <td class="border px-2 py-1 text-right">Tổng cộng:</td>
+          <td class="border px-2 py-1 text-right">${totalKwh} kWh</td> <!-- Tổng tiêu thụ kWh -->
+          <td class="border px-2 py-1 text-right">${totalCost.toLocaleString(
+            "vi-VN"
+          )} ₫</td>
+        </tr>
+      </tfoot>
+    </table>
+  `;
+
+  document.getElementById("reportModal").classList.remove("hidden");
+}
+
+document.getElementById("downloadReport").addEventListener("click", () => {
+  const btn = document.getElementById("downloadReport");
+  const content = document.getElementById("reportContent");
+
+  btn.disabled = true;
+  const originalText = btn.innerText;
+  btn.innerText = "Đang tạo PDF...";
+
+  const opt = {
+    margin: 0.5,
+    filename: `hoa_don_dien_${new Date().toISOString().slice(0, 10)}.pdf`,
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 1.5 },
+    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+  };
+
+  html2pdf()
+    .set(opt)
+    .from(content)
+    .save()
+    .then(() => {
+      btn.innerText = originalText;
+      btn.disabled = false;
+    });
+});
+
+// Khởi tạo biểu đồ ban đầu
+(function () {
+  const to = new Date();
+  const from = new Date(to.getTime() - 6 * 86400000);
   document.getElementById("toDate").value = to.toISOString().slice(0, 10);
   document.getElementById("fromDate").value = from.toISOString().slice(0, 10);
   updateChart();
 })();
 
-// Nút Update
 document.getElementById("updateBtn").addEventListener("click", updateChart);
 
-// Khởi tạo ngày mặc định: 7 ngày gần nhất
-(function initDates() {
-  const to = new Date();
-  const from = new Date(to.getTime() - 6 * 24 * 3600 * 1000);
-  document.getElementById("toDate").value = to.toISOString().slice(0, 10);
-  document.getElementById("fromDate").value = from.toISOString().slice(0, 10);
-  updateChart();
-})();
+// Điện nạp xả
+// Giả lập dữ liệu từ tấm pin mặt trời
+function updateSolarData() {
+  // Dữ liệu giả lập
+  const voltage = (Math.random() * 10 + 210).toFixed(2); // Điện áp từ 210V đến 220V
+  const current = (Math.random() * 5 + 5).toFixed(2); // Dòng điện từ 5A đến 10A
+  const power = (voltage * current).toFixed(2); // Công suất W (P = V * I)
+  const frequency = (Math.random() * 2 + 49).toFixed(2); // Tần số từ 49Hz đến 51Hz
+  const powerFactor = (Math.random() * 0.2 + 0.8).toFixed(2); // Hệ số công suất từ 0.8 đến 1.0
+  const energy = (Math.random() * 50 + 500).toFixed(2); // Điện năng tiêu thụ từ 500 kWh đến 550 kWh
+
+  // Cập nhật các giá trị trên giao diện
+  document.getElementById("voltageValue").innerText = `${voltage} V`;
+  document.getElementById("currentValue").innerText = `${current} A`;
+  document.getElementById("powerValue").innerText = `${power} W`;
+  document.getElementById("frequencyValue").innerText = `${frequency} Hz`;
+  document.getElementById("powerFactorValue").innerText = `${powerFactor}`;
+  document.getElementById("energyValue").innerText = `${energy} kWh`;
+
+  // Cập nhật thanh tiến trình (progress bar)
+  document.getElementById("voltageProgress").style.width = `${
+    (voltage - 210) * 10
+  }%`;
+  document.getElementById("currentProgress").style.width = `${
+    (current - 5) * 10
+  }%`;
+  document.getElementById("powerProgress").style.width = `${
+    ((power - 1100) / 1100) * 100
+  }%`;
+  document.getElementById("frequencyProgress").style.width = `${
+    (frequency - 49) * 50
+  }%`;
+  document.getElementById("powerFactorProgress").style.width = `${
+    (powerFactor - 0.8) * 500
+  }%`;
+  document.getElementById("energyProgress").style.width = `${
+    ((energy - 500) / 50) * 100
+  }%`;
+}
+
+// Cập nhật dữ liệu mỗi 5 giây
+setInterval(updateSolarData, 5000);
+
+// Gọi hàm ngay lập tức khi tải trang để hiển thị dữ liệu ban đầu
+updateSolarData();
+
+// Capapj nhật biểu đồ E2EM

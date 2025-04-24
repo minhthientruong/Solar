@@ -1,204 +1,211 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Home Dashboard</title>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>Smart Home Dashboard</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+     <!-- Tailwind CSS -->
+     <script src="https://cdn.tailwindcss.com"></script>
+
+
+     <!-- Lucide Icons -->
+     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://www.unpkg.com/@eohjsc/era-widget@1.1.3/src/index.js"></script>
 
-    <!-- Highcharts Gantt -->
-    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
-    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
-    <script src="https://code.highcharts.com/gantt/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/gantt/modules/accessibility.js"></script>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-<body class="bg-gray-100 max-w-full  mx-auto px-4 min-h-screen">
-  <div class="p-4">
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-4">
-      <!-- Logo -->
-      <div class="flex items-center space-x-4">
-        <img src="assets/img/logo-era.png" alt="ERa Logo" width="100" />
-      </div>
+     <!-- Highcharts Gantt -->
+     <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+     <script src="https://code.highcharts.com/gantt/modules/exporting.js"></script>
+     <script src="https://code.highcharts.com/gantt/modules/accessibility.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-      <!-- Hamburger menu - hiển thị trên màn hình nhỏ -->
-      <div class="sm:hidden">
-        <button id="menu-toggle" class="text-gray-700 focus:outline-none">
-          <!-- Icon hamburger -->
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
+     <!-- Custom CSS -->
+     <link rel="stylesheet" href="styles.css" />
+   </head>
+ <body class="bg-gray-100 max-w-full  mx-auto px-4 h-[600px] sm:h-auto overflow-y-auto">
+   <div class="p-4">
+     <!-- Header -->
+     <div class="flex justify-between items-center mb-4">
+       <!-- Logo -->
+       <div class="flex items-center space-x-4">
+         <img src="assets/img/logo-era.png" alt="ERa Logo" width="100" />
+       </div>
 
-      <!-- Navigation links -->
-      <div id="menu" class="hidden sm:flex space-x-4">
-        <a href="index.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-          Overview
-        </a>
-        <a href="analytics.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-          Analytics
-        </a>
-        <a href="#" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-          Monitoring
-        </a>
-      </div>
-    </div>
+       <!-- Hamburger menu - hiển thị trên màn hình nhỏ -->
+       <div class="sm:hidden">
+         <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+           <!-- Icon hamburger -->
+           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24">
+             <path stroke-linecap="round" stroke-linejoin="round"
+               d="M4 6h16M4 12h16M4 18h16" />
+           </svg>
+         </button>
+       </div>
 
-    <!-- Dropdown menu for mobile -->
-    <div id="mobile-menu" class="sm:hidden hidden flex-col space-y-2">
-      <a href="index.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
-        Overview
-      </a>
-      <a href="analytics.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
-        Analytics
-      </a>
-      <a href="#" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
-        Monitoring
-      </a>
-    </div>
-  </div>
-        <!-- EM2M Energy Meter Readings -->
-        <div class="p-8 rounded-lg  shadow-md mt-6">
-          <h2 class="text-lg font-bold text-gray-700 mb-4">
-            Thông số Đồng hồ điện EM2M
-          </h2>
-          <div
-            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
-            <div class="p-2 border rounded">
-              <div class="text-sm text-gray-500">Điện áp</div>
-              <div class="text-2xl font-bold text-blue-600" id="voltageValue">
-                220 V
-              </div>
-              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-                <div id="voltageProgress" class="bg-blue-500 h-full"></div>
-              </div>
-            </div>
-            <div class="p-2 border rounded">
-              <div class="text-sm text-gray-500">Dòng điện</div>
-              <div class="text-2xl font-bold text-green-600" id="currentValue">
-                10 A
-              </div>
-              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-                <div id="currentProgress" class="bg-green-500 h-full"></div>
-              </div>
-            </div>
-            <div class="p-2 border rounded">
-              <div class="text-sm text-gray-500">Công suất</div>
-              <div class="text-2xl font-bold text-yellow-500" id="powerValue">
-                2200 W
-              </div>
-              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-                <div id="powerProgress" class="bg-yellow-500 h-full"></div>
-              </div>
-            </div>
-            <div class="p-2 border rounded">
-              <div class="text-sm text-gray-500">Tần số</div>
-              <div
-                class="text-2xl font-bold text-purple-600"
-                id="frequencyValue">
-                50 Hz
-              </div>
-              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-                <div id="frequencyProgress" class="bg-purple-500 h-full"></div>
-              </div>
-            </div>
-            <div class="p-2 border rounded">
-              <div class="text-sm text-gray-500">Hệ số công suất</div>
-              <div
-                class="text-2xl font-bold text-red-500"
-                id="powerFactorValue">
-                0.9
-              </div>
-              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-                <div id="powerFactorProgress" class="bg-red-500 h-full"></div>
-              </div>
-            </div>
-            <div class="p-2 border rounded">
-              <div class="text-sm text-gray-500">Điện năng tiêu thụ</div>
-              <div class="text-2xl font-bold text-indigo-500" id="energyValue">
-                500 kWh
-              </div>
-              <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-                <div id="energyProgress" class="bg-indigo-500 h-full"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <!-- See Full Report Button -->
-          <button
-            id="openModalBtn"
-            class="text-yellow-700 font-semibold hover:bg-yellow-600 hover:text-white neon-card p-4 mt-6 transition-all hover:scale-105 bg-transparent text-white py-2 px-4 rounded-lg">
-           Xem chi tiết báo cáo          </button>
+       <!-- Navigation links -->
+       <div id="menu" class="hidden sm:flex space-x-4">
+         <a href="index.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+           Overview
+         </a>
+         <a href="analytics.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+           Analytics
+         </a>
+         <a href="#" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+           Monitoring
+         </a>
+       </div>
+     </div>
 
-          <!-- ✅ MODAL -->
-          <div
-            id="fullReportModal"
-            class="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center hidden">
-            <div
-           class="bg-white/50 backdrop-blur-md rounded-lg shadow-lg p-12 w-full max-w-3xl relative">              <button
-                id="closeModalBtn"
-                class="absolute top-2 right-2 text-gray-600  hover:text-pink-500 text-4xl">
-                &times;
-              </button>
-              <h3 class="text-2xl font-bold mb-4 text-center">
-                Báo cáo chi tiết thông số
-              </h3>
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div>
-                  <p class="text-gray-500 text-sm">Điện áp</p>
-                  <p class="text-lg font-semibold" id="modalVoltage">-- V</p>
-                </div>
-                <div>
-                  <p class="text-gray-500 text-sm">Dòng điện</p>
-                  <p class="text-lg font-semibold" id="modalCurrent">-- A</p>
-                </div>
-                <div>
-                  <p class="text-gray-500 text-sm">Công suất</p>
-                  <p class="text-lg font-semibold" id="modalPower">-- W</p>
-                </div>
-                <div>
-                  <p class="text-gray-500 text-sm">Tần số</p>
-                  <p class="text-lg font-semibold" id="modalFrequency">-- Hz</p>
-                </div>
-                <div>
-                  <p class="text-gray-500 text-sm">Hệ số công suất</p>
-                  <p class="text-lg font-semibold" id="modalPowerFactor">--</p>
-                </div>
-                <div>
-                  <p class="text-gray-500 text-sm">Điện năng tiêu thụ</p>
-                  <p class="text-lg font-semibold" id="modalEnergy">-- kWh</p>
-                </div>
-              </div>
+     <!-- Dropdown menu for mobile -->
+     <div id="mobile-menu" class="sm:hidden hidden flex-col space-y-2">
+       <a href="index.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+         Overview
+       </a>
+       <a href="analytics.html" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+         Analytics
+       </a>
+       <a href="#" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg block">
+         Monitoring
+       </a>
+     </div>
+   </div>
+         <!-- EM2M Energy Meter Readings -->
+         <div class="p-8 rounded-lg  shadow-md mt-6">
+           <h2 class="text-lg font-bold text-gray-700 mb-4">
+             Thông số Đồng hồ điện EM2M
+           </h2>
+           <div
+             class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
+             <div class="p-2 border rounded">
+               <div class="text-sm text-gray-500">Điện áp</div>
+               <div class="text-2xl font-bold text-blue-600" id="voltageValue">
+                 220 V
+               </div>
+               <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                 <div id="voltageProgress" class="bg-blue-500 h-full"></div>
+               </div>
+             </div>
+             <div class="p-2 border rounded">
+               <div class="text-sm text-gray-500">Dòng điện</div>
+               <div class="text-2xl font-bold text-green-600" id="currentValue">
+                 10 A
+               </div>
+               <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                 <div id="currentProgress" class="bg-green-500 h-full"></div>
+               </div>
+             </div>
+             <div class="p-2 border rounded">
+               <div class="text-sm text-gray-500">Công suất</div>
+               <div class="text-2xl font-bold text-yellow-500" id="powerValue">
+                 2200 W
+               </div>
+               <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                 <div id="powerProgress" class="bg-yellow-500 h-full"></div>
+               </div>
+             </div>
+             <div class="p-2 border rounded">
+               <div class="text-sm text-gray-500">Tần số</div>
+               <div
+                 class="text-2xl font-bold text-purple-600"
+                 id="frequencyValue">
+                 50 Hz
+               </div>
+               <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                 <div id="frequencyProgress" class="bg-purple-500 h-full"></div>
+               </div>
+             </div>
+             <div class="p-2 border rounded">
+               <div class="text-sm text-gray-500">Hệ số công suất</div>
+               <div
+                 class="text-2xl font-bold text-red-500"
+                 id="powerFactorValue">
+                 0.9
+               </div>
+               <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                 <div id="powerFactorProgress" class="bg-red-500 h-full"></div>
+               </div>
+             </div>
+             <div class="p-2 border rounded">
+               <div class="text-sm text-gray-500">Điện năng tiêu thụ</div>
+               <div class="text-2xl font-bold text-indigo-500" id="energyValue">
+                 500 kWh
+               </div>
+               <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+                 <div id="energyProgress" class="bg-indigo-500 h-full"></div>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div>
+           <!-- See Full Report Button -->
+           <button
+             id="openModalBtn"
+             class="text-yellow-700 font-semibold hover:bg-yellow-600 hover:text-white neon-card p-4 mt-6 transition-all hover:scale-105 bg-transparent text-white py-2 px-4 rounded-lg">
+            Xem chi tiết báo cáo          </button>
 
-              <!-- Button to download the report -->
-              <button
-                id="downloadReportBtn"
-                class="mt-6 bg-blue-500 bg-white text-pink-600 hover:bg-pink-600 stroke-current hover:text-white py-2 px-4 rounded-lg w-full">
-              Tải xuống báo cáo
-            </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+           <!-- ✅ MODAL -->
+           <div
+             id="fullReportModal"
+             class="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center hidden">
+             <div
+            class="bg-white/50 backdrop-blur-md rounded-lg shadow-lg p-12 w-full max-w-3xl relative">              <button
+                 id="closeModalBtn"
+                 class="absolute top-2 right-2 text-gray-600  hover:text-pink-500 text-4xl">
+                 &times;
+               </button>
+               <h3 class="text-2xl font-bold mb-4 text-center">
+                 Báo cáo chi tiết thông số
+               </h3>
+               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                 <div>
+                   <p class="text-gray-500 text-sm">Điện áp</p>
+                   <p class="text-lg font-semibold" id="modalVoltage">-- V</p>
+                 </div>
+                 <div>
+                   <p class="text-gray-500 text-sm">Dòng điện</p>
+                   <p class="text-lg font-semibold" id="modalCurrent">-- A</p>
+                 </div>
+                 <div>
+                   <p class="text-gray-500 text-sm">Công suất</p>
+                   <p class="text-lg font-semibold" id="modalPower">-- W</p>
+                 </div>
+                 <div>
+                   <p class="text-gray-500 text-sm">Tần số</p>
+                   <p class="text-lg font-semibold" id="modalFrequency">-- Hz</p>
+                 </div>
+                 <div>
+                   <p class="text-gray-500 text-sm">Hệ số công suất</p>
+                   <p class="text-lg font-semibold" id="modalPowerFactor">--</p>
+                 </div>
+                 <div>
+                   <p class="text-gray-500 text-sm">Điện năng tiêu thụ</p>
+                   <p class="text-lg font-semibold" id="modalEnergy">-- kWh</p>
+                 </div>
+               </div>
 
-    <div class="grid mt-8 grid-cols-1 lg:grid-cols-2 gap-4">
-<div class="bg-white font-sans p-6">
+               <!-- Button to download the report -->
+               <button
+                 id="downloadReportBtn"
+                 class="mt-6 bg-blue-500 bg-white text-pink-600 hover:bg-pink-600 stroke-current hover:text-white py-2 px-4 rounded-lg w-full">
+               Tải xuống báo cáo
+             </button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
 
-  <div class="max-w-2xl mx-auto">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">History</h2>
+     <div class="grid mt-8 grid-cols-1 lg:grid-cols-2 gap-4">
+ <div class="bg-white font-sans p-6">
+
+   <div class="max-w-2xl mx-auto">
+     <h2 class="text-2xl font-bold text-gray-800 mb-4">History</h2>
+
 
     <!-- Controls -->
     <div class="flex flex-wrap items-center gap-4 mb-6">
@@ -214,163 +221,193 @@
         <span>Price (₫/kWh)</span>
         <input type="number" id="priceInput" value="3000" class="border-gray-300 rounded p-2 w-24 text-sm"/>
       </label>
-      <button
-        id="updateBtn"
-        class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm"
-      >
+      <button id="updateBtn" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm">
         Update
+      </button>
+      <button onclick="showReport()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm">
+        Xem hóa đơn
       </button>
     </div>
 
-    <!-- Chart Container -->
-    <div id="historyChart" class="w-full h-96"></div>
-  </div>
-      </div>
-      <!-- Center Panel -->
-      <div class="bg-white p-4 rounded-lg shadow-md">
-        <div class="flex justify-between items-center mb-4">
-          <div class="text-gray-700 text-lg font-bold">Meevis Nederweert</div>
-          <i class="fas fa-search text-gray-500"></i>
-        </div>
-        <img
-          alt="House with solar panels"
-          class="rounded-lg mb-4"
-          height="400"
-          src="https://storage.googleapis.com/a1aa/image/uO_hbXEFKzReJAQoKcsebkVjluiyTbIYuTtvlFTzKZo.jpg"
-          width="600" />
-        <div class="text-gray-700 text-lg font-bold mb-2">Maxi Family YMCA</div>
-        <div class="text-gray-500 text-sm mb-2">ID: 449836</div>
-        <div class="text-gray-500 text-sm mb-2">About: SunLux</div>
-        <div class="text-gray-500 text-sm mb-2">
-          Installation Date: Nov 12, 2020
-        </div>
-        <div class="text-gray-500 text-sm mb-2">
-          Address: Geheugden 3-A, 6031 Nederweert, Netherlands
-        </div>
-        <div class="text-2xl font-bold text-gray-700">2.74 kWp</div>
-        <div class="flex justify-between items-center mt-4">
-          <i class="fas fa-info-circle text-gray-500"></i>
-          <i class="fas fa-cog text-gray-500"></i>
-          <i class="fas fa-bell text-gray-500"></i>
-          <i class="fas fa-download text-gray-500"></i>
-        </div>
-      </div>
-      <!-- Right Panel -->
+      <!-- Chart -->
+    <div id="historyChart" class="w-full h-96 mb-8"></div>
 
-
-          <!-- Date Range Display -->
-
-
-          <!-- Production Section -->
-          <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-            <div class="text-gray-500 mb-2">Sản xuất</div>
-            <div
-              class="text-2xl font-bold text-gray-700 mb-2"
-              id="productionValue">
-              28.5 kW
-            </div>
-            <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
-            <div class="text-gray-500 text-sm mb-2">0.00 kWh</div>
-            <div class="bg-gray-300 h-2 rounded-lg overflow-hidden">
-              <div class="bg-black h-full w-full"></div>
-            </div>
-          </div>
-
-          <!-- Consumption Section -->
-          <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-            <div class="text-gray-500 mb-2">Tiêu thụ</div>
-            <div
-              class="text-2xl font-bold text-gray-700 mb-2"
-              id="consumptionValue">
-              56.46 kW
-            </div>
-            <div class="text-gray-500 text-sm mb-2">28.25 kWh</div>
-            <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
-            <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-              <div class="bg-yellow-500 h-full w-1/2"></div>
-            </div>
-          </div>
-
-          <!-- Power and Energy Section -->
-          <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-            <div class="text-gray-500 mb-2">Công suất</div>
-            <div class="flex justify-between items-center mb-4">
-              <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-                Công suất
-              </button>
-              <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-                Năng lượng
-              </button>
-            </div>
-
-            <!-- Power and energy details -->
-            <div class="grid grid-cols-3 gap-2">
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-700">7.5 kW</div>
-                <div class="text-gray-500 text-sm">0:00</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-700">5 kW</div>
-                <div class="text-gray-500 text-sm">2:30</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
-                <div class="text-gray-500 text-sm">5:00</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-700">0 kW</div>
-                <div class="text-gray-500 text-sm">7:30</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
-                <div class="text-gray-500 text-sm">10:00</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-700">5 kW</div>
-                <div class="text-gray-500 text-sm">12:30</div>
-              </div>
-            </div>
-            <div class="text-gray-500 text-sm mt-4">
-              Tổng năng lượng sản xuất được là 28.25 kWh từ năng lượng mặt trời
-              và 28.22 kWh từ lưới điện.
-            </div>
-          </div>
-
-          <!-- Electricity Price Input -->
-          <div class="bg-white p-4 rounded-lg shadow-md mt-6">
-            <div class="mb-4">
-              <label for="priceInput" class="block text-gray-700 text-sm"
-                >Đơn giá (đ/1kWh):</label
-              >
-              <input
-                type="number"
-                id="priceInput"
-                class="border border-gray-300 p-2 rounded w-full"
-                placeholder="Nhập đơn giá"
-                onchange="updateElectricityCost()" />
-            </div>
-            <div class="mb-4">
-              <button
-                class="bg-blue-500 text-white py-2 px-4 rounded-lg"
-                onclick="calculateElectricityCost()">
-                Cập nhật hóa đơn điện
-              </button>
-            </div>
-            <div id="electricityCostResult" class="mt-4"></div>
-          </div>
-        </div>
-      </div>
-
+    <!-- Report Modal -->
+  <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm hidden flex items-center justify-center z-50 px-4 sm:px-6">
+  <div class="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg relative">
+    <button onclick="document.getElementById('reportModal').classList.add('hidden')" class="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl">×</button>
+    <h3 class="text-lg font-semibold mb-4">Hóa đơn tiền điện</h3>
+    <div id="reportContent" class="text-sm space-y-2"></div>
+    <div class="mt-4 text-right">
+      <button id="downloadReport" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm">
+        Tải xuống hóa đơn (PDF)
+      </button>
     </div>
-<script>
+  </div>
+</div>
+
+  </div>
+
+<!-- Modal báo cáo -->
+<div
+  id="reportModal"
+  class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white p-6 rounded-lg shadow-lg max-w-xl w-full relative">
+    <button
+      id="closeReport"
+      class="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+    >
+      ✕
+    </button>
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">Báo cáo hóa đơn</h3>
+    <div id="reportContent" class="text-sm text-gray-700 space-y-3"></div>
+  </div>
+</div>
+   </div>
+
+       <!-- Center Panel -->
+       <div class="bg-white p-4 rounded-lg shadow-md">
+         <div class="flex justify-between items-center mb-4">
+           <div class="text-gray-700 text-lg font-bold">Meevis Nederweert</div>
+           <i class="fas fa-search text-gray-500"></i>
+         </div>
+         <img
+           alt="House with solar panels"
+           class="rounded-lg mb-4"
+           height="400"
+           src="https://storage.googleapis.com/a1aa/image/uO_hbXEFKzReJAQoKcsebkVjluiyTbIYuTtvlFTzKZo.jpg"
+           width="600" />
+         <div class="text-gray-700 text-lg font-bold mb-2">Maxi Family YMCA</div>
+         <div class="text-gray-500 text-sm mb-2">ID: 449836</div>
+         <div class="text-gray-500 text-sm mb-2">About: SunLux</div>
+         <div class="text-gray-500 text-sm mb-2">
+           Installation Date: Nov 12, 2020
+         </div>
+         <div class="text-gray-500 text-sm mb-2">
+           Address: Geheugden 3-A, 6031 Nederweert, Netherlands
+         </div>
+         <div class="text-2xl font-bold text-gray-700">2.74 kWp</div>
+         <div class="flex justify-between items-center mt-4">
+           <i class="fas fa-info-circle text-gray-500"></i>
+           <i class="fas fa-cog text-gray-500"></i>
+           <i class="fas fa-bell text-gray-500"></i>
+           <i class="fas fa-download text-gray-500"></i>
+         </div>
+       </div>
+       <!-- Right Panel -->
 
 
-</script>
-
-    <!-- Custom Script -->
-    <script src="script.js">  </script>
+           <!-- Date Range Display -->
 
 
-  </body>
+           <!-- Production Section -->
+           <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+             <div class="text-gray-500 mb-2">Sản xuất</div>
+             <div
+               class="text-2xl font-bold text-gray-700 mb-2"
+               id="productionValue">
+               28.5 kW
+             </div>
+             <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
+             <div class="text-gray-500 text-sm mb-2">0.00 kWh</div>
+             <div class="bg-gray-300 h-2 rounded-lg overflow-hidden">
+               <div class="bg-black h-full w-full"></div>
+             </div>
+           </div>
 
-</html>
+           <!-- Consumption Section -->
+           <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+             <div class="text-gray-500 mb-2">Tiêu thụ</div>
+             <div
+               class="text-2xl font-bold text-gray-700 mb-2"
+               id="consumptionValue">
+               56.46 kW
+             </div>
+             <div class="text-gray-500 text-sm mb-2">28.25 kWh</div>
+             <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
+             <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
+               <div class="bg-yellow-500 h-full w-1/2"></div>
+             </div>
+           </div>
+
+           <!-- Power and Energy Section -->
+           <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+             <div class="text-gray-500 mb-2">Công suất</div>
+             <div class="flex justify-between items-center mb-4">
+               <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+                 Công suất
+               </button>
+               <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
+                 Năng lượng
+               </button>
+             </div>
+
+             <!-- Power and energy details -->
+             <div class="grid grid-cols-3 gap-2">
+               <div class="text-center">
+                 <div class="text-2xl font-bold text-gray-700">7.5 kW</div>
+                 <div class="text-gray-500 text-sm">0:00</div>
+               </div>
+               <div class="text-center">
+                 <div class="text-2xl font-bold text-gray-700">5 kW</div>
+                 <div class="text-gray-500 text-sm">2:30</div>
+               </div>
+               <div class="text-center">
+                 <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
+                 <div class="text-gray-500 text-sm">5:00</div>
+               </div>
+               <div class="text-center">
+                 <div class="text-2xl font-bold text-gray-700">0 kW</div>
+                 <div class="text-gray-500 text-sm">7:30</div>
+               </div>
+               <div class="text-center">
+                 <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
+                 <div class="text-gray-500 text-sm">10:00</div>
+               </div>
+               <div class="text-center">
+                 <div class="text-2xl font-bold text-gray-700">5 kW</div>
+                 <div class="text-gray-500 text-sm">12:30</div>
+               </div>
+             </div>
+             <div class="text-gray-500 text-sm mt-4">
+               Tổng năng lượng sản xuất được là 28.25 kWh từ năng lượng mặt trời
+               và 28.22 kWh từ lưới điện.
+             </div>
+           </div>
+
+           <!-- Electricity Price Input -->
+           <div class="bg-white p-4 rounded-lg shadow-md mt-6">
+             <div class="mb-4">
+               <label for="priceInput" class="block text-gray-700 text-sm"
+                 >Đơn giá (đ/1kWh):</label
+               >
+               <input
+                 type="number"
+                 id="priceInput"
+                 class="border border-gray-300 p-2 rounded w-full"
+                 placeholder="Nhập đơn giá"
+                 onchange="updateElectricityCost()" />
+             </div>
+             <div class="mb-4">
+               <button
+                 class="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                 onclick="calculateElectricityCost()">
+                 Cập nhật hóa đơn điện
+               </button>
+             </div>
+             <div id="electricityCostResult" class="mt-4"></div>
+           </div>
+         </div>
+       </div>
+
+     </div>
+
+
+     <!-- Custom Script -->
+<script src="script.js"></script>
+
+
+   </body>
+
+ </html>
