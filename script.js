@@ -674,4 +674,3 @@ setInterval(updateSolarData, 5000);
 updateSolarData();
 
 // Capapj nhật biểu đồ E2EM
-EraWidget.mobileHeight(300);
