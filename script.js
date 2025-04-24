@@ -283,7 +283,6 @@
 lucide.createIcons();
 // Chart thông tin
 // Hàm xác định màu pin theo phần trăm sạc
-EraWidget.mobileHeight(300);
 
 // reportModal.js
 //thanh tiến trình
@@ -675,3 +674,4 @@ setInterval(updateSolarData, 5000);
 updateSolarData();
 
 // Capapj nhật biểu đồ E2EM
+EraWidget.mobileHeight(300);
