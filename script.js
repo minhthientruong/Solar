@@ -283,6 +283,7 @@
 lucide.createIcons();
 // Chart thông tin
 // Hàm xác định màu pin theo phần trăm sạc
+EraWidget.mobileHeight(300);
 
 // reportModal.js
 //thanh tiến trình
