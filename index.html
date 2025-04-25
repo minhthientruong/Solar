@@ -263,43 +263,150 @@
     <div id="reportContent" class="text-sm text-gray-700 space-y-3"></div>
   </div>
 </div>
-   </div>
-
+</div>
        <!-- Center Panel -->
-       <div class="bg-white p-4 rounded-lg shadow-md">
-         <div class="flex justify-between items-center mb-4">
-           <div class="text-gray-700 text-lg font-bold">Meevis Nederweert</div>
-           <i class="fas fa-search text-gray-500"></i>
-         </div>
-         <img
-           alt="House with solar panels"
-           class="rounded-lg mb-4"
-           height="400"
-           src="https://storage.googleapis.com/a1aa/image/uO_hbXEFKzReJAQoKcsebkVjluiyTbIYuTtvlFTzKZo.jpg"
-           width="600" />
-         <div class="text-gray-700 text-lg font-bold mb-2">Maxi Family YMCA</div>
-         <div class="text-gray-500 text-sm mb-2">ID: 449836</div>
-         <div class="text-gray-500 text-sm mb-2">About: SunLux</div>
-         <div class="text-gray-500 text-sm mb-2">
-           Installation Date: Nov 12, 2020
-         </div>
-         <div class="text-gray-500 text-sm mb-2">
-           Address: Geheugden 3-A, 6031 Nederweert, Netherlands
-         </div>
-         <div class="text-2xl font-bold text-gray-700">2.74 kWp</div>
-         <div class="flex justify-between items-center mt-4">
-           <i class="fas fa-info-circle text-gray-500"></i>
-           <i class="fas fa-cog text-gray-500"></i>
-           <i class="fas fa-bell text-gray-500"></i>
-           <i class="fas fa-download text-gray-500"></i>
-         </div>
-       </div>
+<div class=" p-4 bg-gradient-to-br rounded-lg from-[#0f172a] via-[#1e293b] to-[#3b0764]">
+  <!-- Card mờ trong suốt -->
+   <!-- Card 1 -->
+  <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-md p-4 mb-4 border border-white/20">
+    <!-- Tiêu đề và trạng thái -->
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-lg font-semibold text-white">Khu Vườn</h2>
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></span>
+        <span class="text-sm text-green-400">Online</span>
+      </div>
+    </div>
+    <!-- Điện năng tiêu thụ -->
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm text-gray-300">Điện năng tiêu thụ</span>
+<span id="powerConsumptionGarden" class="text-sm font-medium text-white">-- W</span>
+    </div>
+
+    <!-- Nút bật tắt điện tổng -->
+    <div class="flex items-center justify-between">
+      <span class="text-sm text-gray-300">Điện tổng</span>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" class="sr-only peer" id="powerSwitchLivingRoom" onchange="togglePower('livingRoom')">
+        <div class="w-11 h-6 bg-red-300 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
+        <span class="ml-3 text-sm font-medium text-gray-300">CP tổng</span>
+      </label>
+    </div>
+    <div class="flex  items-center mt-4 space-x-6">
+  <i data-lucide="flower-2" id="den1" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="sun" id="den2" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="lightbulb" id="den3" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="lightbulb" id="den4" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+</div>
+  </div>
+     <!-- Card 2 -->
+
+  <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-md p-4 mb-4 border border-white/20">
+
+    <!-- Tiêu đề và trạng thái -->
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-lg font-semibold text-white">Phòng Khách</h2>
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></span>
+        <span class="text-sm text-green-400">Online</span>
+      </div>
+    </div>
+
+    <!-- Điện năng tiêu thụ -->
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm text-gray-300">Điện năng tiêu thụ</span>
+      <span id="powerConsumptionLivingRoom" class="text-sm font-medium text-white">-- W</span>
+    </div>
+
+    <!-- Nút bật tắt điện tổng -->
+    <div class="flex items-center justify-between">
+      <span class="text-sm text-gray-300">Điện tổng</span>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" class="sr-only peer" id="powerSwitchLivingRoom" onchange="togglePower('livingRoom')">
+        <div class="w-11 h-6 bg-red-300 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
+        <span class="ml-3 text-sm font-medium text-gray-300">CP tổng</span>
+      </label>
+    </div>
+<div class="flex  items-center mt-4 space-x-6">
+  <i data-lucide="air-vent" id="den1" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="cast" id="den2" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="music-4" id="den3" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="lightbulb" id="den4" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+</div>
+</div>
+    <!-- Card 3 -->
+
+<div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-md p-4 mb-4 border border-white/20">
+
+    <!-- Tiêu đề và trạng thái -->
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-lg font-semibold text-white">Phòng Bếp</h2>
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></span>
+        <span class="text-sm text-green-400">Online</span>
+      </div>
+    </div>
+
+    <!-- Điện năng tiêu thụ -->
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm text-gray-300">Điện năng tiêu thụ</span>
+<span id="powerConsumptionKitchen" class="text-sm font-medium text-white">-- W</span>
+    </div>
+
+    <!-- Nút bật tắt điện tổng -->
+    <div class="flex items-center justify-between">
+      <span class="text-sm text-gray-300">Điện tổng</span>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" class="sr-only peer" id="powerSwitchLivingRoom" onchange="togglePower('livingRoom')">
+        <div class="w-11 h-6 bg-red-300 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
+        <span class="ml-3 text-sm font-medium text-gray-300">CP tổng</span>
+      </label>
+    </div>
+    <div class="flex  items-center mt-4 space-x-6">
+  <i data-lucide="air-vent" id="den1" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="cast" id="den2" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="lightbulb" id="den3" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="lightbulb" id="den4" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+</div>
+</div>
+   <!-- Card 4 -->
+
+<div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-md p-4 border border-white/20">
+
+    <!-- Tiêu đề và trạng thái -->
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-lg font-semibold text-white">Phòng Ngủ</h2>
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></span>
+        <span class="text-sm text-green-400">Online</span>
+      </div>
+    </div>
+
+    <!-- Điện năng tiêu thụ -->
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm text-gray-300">Điện năng tiêu thụ</span>
+<span id="powerConsumptionBedroom" class="text-sm font-medium text-white">-- W</span>
+    </div>
+
+    <!-- Nút bật tắt điện tổng -->
+    <div class="flex items-center justify-between">
+      <span class="text-sm text-gray-300">Điện tổng</span>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" class="sr-only peer" id="powerSwitchLivingRoom" onchange="togglePower('livingRoom')">
+        <div class="w-11 h-6 bg-red-300 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
+        <span class="ml-3 text-sm font-medium text-gray-300">CP tổng</span>
+      </label>
+    </div>
+    <div class="flex  items-center mt-4 space-x-6">
+  <i data-lucide="air-vent" id="den1" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="lamp" id="den2" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="bed-double" id="den3" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+  <i data-lucide="lightbulb" id="den4" class="w-7 h-7 text-red-500 cursor-pointer transition" onclick="toggleLight(this)"></i>
+</div>
+  </div>
+
+</div>
        <!-- Right Panel -->
-
-
-           <!-- Date Range Display -->
-
-
            <!-- Production Section -->
            <div class="bg-white p-4 rounded-lg shadow-md mb-4">
              <div class="text-gray-500 mb-2">Sản xuất</div>

@@ -47,12 +47,10 @@ function fetchData() {
       document.getElementById("voltageValue").innerText = `${data.voltage} V`;
       document.getElementById("currentValue").innerText = `${data.current} A`;
       document.getElementById("powerValue").innerText = `${data.power} W`;
-      document.getElementById(
-        "frequencyValue"
-      ).innerText = `${data.frequency} Hz`;
-      document.getElementById(
-        "powerFactorValue"
-      ).innerText = `${data.power_factor}`;
+      document.getElementById("frequencyValue").innerText =
+        `${data.frequency} Hz`;
+      document.getElementById("powerFactorValue").innerText =
+        `${data.power_factor}`;
       document.getElementById("energyValue").innerText = `${data.energy} kWh`;
 
       // Tính toán thanh tiến trình
@@ -168,9 +166,8 @@ function calculateElectricityCost() {
   const totalKWh = 28.25; // Example value
   const totalCost = pricePerKWh * totalKWh;
 
-  document.getElementById(
-    "electricityCostResult"
-  ).innerText = `Tổng hóa đơn điện: ${totalCost.toLocaleString()} VNĐ`;
+  document.getElementById("electricityCostResult").innerText =
+    `Tổng hóa đơn điện: ${totalCost.toLocaleString()} VNĐ`;
 }
 
 // Initialize dashboard data on page load
@@ -424,4 +421,38 @@ setInterval(updateSolarData, 5000);
 // Gọi hàm ngay lập tức khi tải trang để hiển thị dữ liệu ban đầu
 updateSolarData();
 
-// Capapj nhật biểu đồ E2EM
+// on off đèn
+function toggleLight(icon) {
+  const isOn = icon.classList.contains("text-green-500");
+  icon.classList.toggle("text-green-500", !isOn);
+  icon.classList.toggle("text-red-500", isOn);
+
+  // Thêm xử lý logic bật tắt thiết bị thật nếu cần
+  console.log(icon.id + " is now " + (isOn ? "OFF" : "ON"));
+}
+// Giả lập số Kwh
+function generateRandomWatt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function updatePowerConsumption() {
+  const rooms = {
+    powerConsumptionGarden: generateRandomWatt(50, 200), // Khu Vườn
+    powerConsumptionLivingRoom: generateRandomWatt(100, 300), // Phòng Khách
+    powerConsumptionKitchen: generateRandomWatt(150, 500), // Phòng Bếp
+    powerConsumptionBedroom: generateRandomWatt(70, 250), // Phòng Ngủ
+  };
+
+  for (let id in rooms) {
+    const span = document.getElementById(id);
+    if (span) {
+      span.textContent = `${rooms[id]} W`;
+    }
+  }
+}
+
+// Cập nhật mỗi 3 giây
+setInterval(updatePowerConsumption, 3000);
+
+// Cập nhật ngay lần đầu
+updatePowerConsumption();
