@@ -408,80 +408,41 @@
 </div>
        <!-- Right Panel -->
            <!-- Production Section -->
-           <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-             <div class="text-gray-500 mb-2">Sản xuất</div>
-             <div
-               class="text-2xl font-bold text-gray-700 mb-2"
-               id="productionValue">
-               28.5 kW
-             </div>
-             <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
-             <div class="text-gray-500 text-sm mb-2">0.00 kWh</div>
-             <div class="bg-gray-300 h-2 rounded-lg overflow-hidden">
-               <div class="bg-black h-full w-full"></div>
-             </div>
-           </div>
+           <!-- Solar Panel A -->
 
-           <!-- Consumption Section -->
-           <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-             <div class="text-gray-500 mb-2">Tiêu thụ</div>
-             <div
-               class="text-2xl font-bold text-gray-700 mb-2"
-               id="consumptionValue">
-               56.46 kW
-             </div>
-             <div class="text-gray-500 text-sm mb-2">28.25 kWh</div>
-             <div class="text-gray-500 text-sm mb-2">28.22 kWh</div>
-             <div class="bg-gray-300 h-2 rounded-lg overflow-hidden mb-2">
-               <div class="bg-yellow-500 h-full w-1/2"></div>
-             </div>
-           </div>
+
 
            <!-- Power and Energy Section -->
-           <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-             <div class="text-gray-500 mb-2">Công suất</div>
-             <div class="flex justify-between items-center mb-4">
-               <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-                 Công suất
-               </button>
-               <button class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-                 Năng lượng
-               </button>
-             </div>
+              <div id="reportCard" class="bg-gradient-to-br mt-8 from-gray-800 via-gray-900 to-black text-white rounded-2xl p-6 shadow-2xl backdrop-blur-lg w-full mx-auto">
+  <div class="flex justify-between items-start">
+    <div>
+      <h3 class="text-xl font-semibold mb-1">Báo cáo hôm nay</h3>
+      <p class="text-sm text-white/70">Tổng sản lượng</p>
+      <p id="totalKwh" class="text-2xl font-bold text-green-300 mt-1">0.0 kWh</p>
 
-             <!-- Power and energy details -->
-             <div class="grid grid-cols-3 gap-2">
-               <div class="text-center">
-                 <div class="text-2xl font-bold text-gray-700">7.5 kW</div>
-                 <div class="text-gray-500 text-sm">0:00</div>
-               </div>
-               <div class="text-center">
-                 <div class="text-2xl font-bold text-gray-700">5 kW</div>
-                 <div class="text-gray-500 text-sm">2:30</div>
-               </div>
-               <div class="text-center">
-                 <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
-                 <div class="text-gray-500 text-sm">5:00</div>
-               </div>
-               <div class="text-center">
-                 <div class="text-2xl font-bold text-gray-700">0 kW</div>
-                 <div class="text-gray-500 text-sm">7:30</div>
-               </div>
-               <div class="text-center">
-                 <div class="text-2xl font-bold text-gray-700">2.5 kW</div>
-                 <div class="text-gray-500 text-sm">10:00</div>
-               </div>
-               <div class="text-center">
-                 <div class="text-2xl font-bold text-gray-700">5 kW</div>
-                 <div class="text-gray-500 text-sm">12:30</div>
-               </div>
-             </div>
-             <div class="text-gray-500 text-sm mt-4">
-               Tổng năng lượng sản xuất được là 28.25 kWh từ năng lượng mặt trời
-               và 28.22 kWh từ lưới điện.
-             </div>
-           </div>
+      <p class="mt-3 text-sm text-white/70">Tiết kiệm được</p>
+      <p id="savedMoney" class="text-lg font-bold text-emerald-400">0₫</p>
 
+      <div class="mt-4">
+        <p class="text-sm text-white/60">So với hôm qua:</p>
+        <p id="compareYesterday" class="text-sm font-semibold text-yellow-400">+0.0 kWh (↑0%)</p>
+      </div>
+    </div>
+
+
+  </div>
+
+  <!-- Progress bar -->
+  <div class="mt-6">
+    <div class="flex justify-between text-sm text-white/70 mb-1">
+      <span>Đạt được</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+      <div id="progressBar" class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+    </div>
+  </div>
+</div>
            <!-- Electricity Price Input -->
            <div class="bg-white p-4 rounded-lg shadow-md mt-6">
              <div class="mb-4">

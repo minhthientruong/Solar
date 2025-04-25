@@ -456,3 +456,31 @@ setInterval(updatePowerConsumption, 3000);
 
 // Cập nhật ngay lần đầu
 updatePowerConsumption();
+
+// Initial call to simulate data when the page loads
+
+function updateReportData() {
+  const kwh = (Math.random() * 10).toFixed(1); // từ 0 đến 10 kWh
+  const saved = (kwh * 1800).toLocaleString("vi-VN") + "₫"; // mỗi kWh ~ 1800đ
+  const percent = Math.floor(Math.random() * 100) + 1; // 1-100%
+  const compare = (Math.random() * 2 - 1).toFixed(1); // -1 -> +1 kWh
+  const comparePercent = Math.abs(((compare / kwh) * 100).toFixed(0));
+  const isUp = compare >= 0;
+
+  document.getElementById("totalKwh").innerText = `${kwh} kWh`;
+  document.getElementById("savedMoney").innerText = saved;
+  document.getElementById("progressBar").style.width = `${percent}%`;
+  document.getElementById("progressPercent").innerText = `${percent}%`;
+  document.getElementById("compareYesterday").innerText =
+    `${compare >= 0 ? "+" : "-"}${Math.abs(compare)} kWh (${isUp ? "↑" : "↓"}${comparePercent}%)`;
+  document
+    .getElementById("compareYesterday")
+    .classList.toggle("text-yellow-400", isUp);
+  document
+    .getElementById("compareYesterday")
+    .classList.toggle("text-red-400", !isUp);
+}
+
+// Khởi tạo và cập nhật mỗi 5 giây
+updateReportData();
+setInterval(updateReportData, 5000);

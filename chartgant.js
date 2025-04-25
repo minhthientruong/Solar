@@ -169,3 +169,54 @@ function updateSimulatedCharging() {
 // Gọi lần đầu và lặp lại mỗi 5s
 updateSimulatedCharging();
 setInterval(updateSimulatedCharging, 5000);
+// Function to simulate random solar data Giả lập 2 Card
+function simulateSolarData() {
+  // Pin A Data
+  let powerA = Math.floor(Math.random() * 1000) + 200; // Simulated power between 200W and 1200W
+  let kwhTodayA = (Math.random() * 5).toFixed(2); // Simulated kWh between 0 and 5
+  let progressA = Math.random() * 100; // Simulated progress between 0% and 100
+  let chargingStatusA = progressA > 20 ? "Đang sạc" : "Không sạc"; // Simulate charging status
+
+  // Update UI for Pin A
+  document.getElementById("currentPowerA").innerText = `${powerA} W`;
+  document.getElementById("kwhTodayA").innerText = `${kwhTodayA} kWh`;
+  document.getElementById("progressBarA").style.width = `${progressA}%`;
+  document.getElementById("progressPercentA").innerText =
+    `${Math.round(progressA)}%`;
+  document.getElementById("statusA").innerText = chargingStatusA;
+
+  // Pin B Data
+  let powerB = Math.floor(Math.random() * 1000) + 200; // Simulated power between 200W and 1200W
+  let kwhTodayB = (Math.random() * 5).toFixed(2); // Simulated kWh between 0 and 5
+  let progressB = Math.random() * 100; // Simulated progress between 0% and 100
+  let chargingStatusB = progressB > 20 ? "Đang sạc" : "Không sạc"; // Simulate charging status
+
+  // Update UI for Pin B
+  document.getElementById("currentPowerB").innerText = `${powerB} W`;
+  document.getElementById("kwhTodayB").innerText = `${kwhTodayB} kWh`;
+  document.getElementById("progressBarB").style.width = `${progressB}%`;
+  document.getElementById("progressPercentB").innerText =
+    `${Math.round(progressB)}%`;
+  document.getElementById("statusB").innerText = chargingStatusB;
+
+  // Simulate the border animation based on progress
+  let borderA = document.getElementById("borderA");
+  let borderB = document.getElementById("borderB");
+
+  if (progressA >= 100) {
+    borderA.style.animation = "borderAnimation 5s infinite"; // Trigger animation when fully charged
+  } else {
+    borderA.style.animation = "none";
+  }
+
+  if (progressB >= 100) {
+    borderB.style.animation = "borderAnimation 5s infinite"; // Trigger animation when fully charged
+  } else {
+    borderB.style.animation = "none";
+  }
+}
+// Báo cáo
+
+// Call the simulateSolarData function every 5 seconds to update the data
+setInterval(simulateSolarData, 5000);
+simulateSolarData();
