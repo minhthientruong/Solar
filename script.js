@@ -308,8 +308,10 @@ function showReport() {
   document.getElementById("reportContent").innerHTML = `
     <div class="flex items-center justify-between mb-4">
     <img src="assets/img/logo-era.png" alt="Logo" class="h-12">
-    <div class="text-right">
-      <p><strong>Khách hàng:</strong> Nguyễn Văn A</p>
+    <div class="text-left mr-4">
+      <p><strong>Khách hàng:</strong> Trương Minh Thiện </p>
+            <p><strong>Số điện thoại:</strong> 0363739222</p>
+
       <p><strong>Mã KH:</strong> 123456789</p>
     </div>
   </div>
@@ -351,7 +353,7 @@ document.getElementById("downloadReport").addEventListener("click", () => {
     margin: 0.5,
     filename: `hoa_don_dien_${new Date().toISOString().slice(0, 10)}.pdf`,
     image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 1.5 },
+    html2canvas: { scale: 1 },
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
   };
 

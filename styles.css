@@ -1,3 +1,35 @@
+@keyframes neonGlow {
+  0% {
+    box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00,
+      0 0 30px #00ff00;
+  }
+  50% {
+    box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 40px #00ff00,
+      0 0 60px #00ff00;
+  }
+  100% {
+    box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00,
+      0 0 30px #00ff00;
+  }
+}
+
+.neon-border {
+  border: 5px solid #00ff00;
+  border-radius: 16px;
+  animation: neonGlow 1.5s infinite;
+}
+
+.glow-border {
+  border: 6px solid #00ff00; /* Neon green */
+  border-radius: 16px;
+  animation: borderGlow 1.5s infinite;
+}
+.glow-border {
+  border: 3px solid transparent;
+  border-radius: 12px;
+  animation: borderGlow 2s infinite;
+}
+
 /* Hiệu ứng viền neon */
 .gauge-ring {
   transition: background-image 0.8s linear, box-shadow 0.8s ease-in-out;
@@ -124,12 +156,4 @@ input[type="range"] {
   100% {
     box-shadow: 0 0 5px #ffa600, 0 0 10px #ffa600, 0 0 20px #ffa600;
   }
-}
-
-.neon-card {
-  border: 2px solid #ee642d;
-  animation: neonPulse 2s infinite;
-  border-radius: 1rem;
-  background-color: #0e0e0e;
-  color: white;
 }
