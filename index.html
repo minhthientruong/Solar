@@ -220,6 +220,15 @@
         <span>Price (₫/kWh)</span>
         <input type="number" id="priceInput" value="3000" class="border-gray-300 rounded p-2 w-24 text-sm"/>
       </label>
+      <label class="flex items-center text-xs text-gray-600 space-x-2">
+  <div class="flex items-center space-x-2 text-xs text-gray-600">
+  <div id="viewModeButtons" class="flex space-x-1">
+    <button data-mode="D" class="view-btn bg-teal-100 text-teal-800 px-2 py-1 rounded border border-teal-300">D</button>
+    <button data-mode="W" class="view-btn bg-white text-gray-700 px-2 py-1 rounded border">W</button>
+    <button data-mode="M" class="view-btn bg-white text-gray-700 px-2 py-1 rounded border">M</button>
+    <button data-mode="Y" class="view-btn bg-white text-gray-700 px-2 py-1 rounded border">Y</button>
+  </div>
+</div>
       <button id="updateBtn" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm">
         Update
       </button>
@@ -407,8 +416,74 @@
 
 </div>
        <!-- Right Panel -->
-           <!-- Production Section -->
-           <!-- Solar Panel A -->
+       <section class="relative bg-gray-50 p-6 rounded-xl shadow-lg">
+  <div class="grid grid-cols-3 gap-4 relative">
+
+    <!-- Solar Panel -->
+    <div class="flex flex-col items-center z-10">
+      <img src="assets/img/pinsolar.png" alt="Solar Panel" class="w-20 h-20 mb-2">
+      <div class="text-xl font-semibold text-yellow-600">7202W</div>
+      <div class="text-sm text-gray-600">Công suất PV</div>
+    </div>
+
+    <!-- Inverter -->
+    <div class="flex flex-col items-center z-10">
+      <img src="assets/img/traminverter.png" alt="Inverter" class="w-20 h-20 mb-2">
+      <div class="text-sm text-gray-600">Trạm trung truyển</div>
+    </div>
+
+    <!-- Battery -->
+    <div class="flex flex-col items-center z-10">
+      <img src="assets/img/pinluutru.png" alt="Battery" class="w-20 h-20 mb-2">
+      <div class="text-xl font-semibold text-green-600">5733W</div>
+      <div class="text-sm text-gray-600">Công suất sạc</div>
+      <div class="text-xl font-semibold text-blue-600 mt-2">55.2Vdc</div>
+      <div class="text-sm text-gray-600">87% Dung lượng</div>
+    </div>
+
+    <!-- Grid -->
+    <div class="flex flex-col items-center col-span-1 z-10">
+      <img src="assets/img/dienluoi.png" alt="Grid" class="w-20 h-20 mb-2">
+      <div class="text-xl font-semibold text-gray-700">219.9Vac</div>
+      <div class="text-sm text-gray-600">50.18Hz</div>
+      <div class="text-xl font-semibold text-red-500">0W</div>
+    </div>
+
+    <!-- Consumption -->
+    <div class="flex flex-col items-center col-span-1 z-10">
+      <img src="assets/img/home.png" alt="Consumption" class="w-16 h-16 mb-2">
+      <div class="text-xl font-semibold text-indigo-600">1273W</div>
+      <div class="text-sm text-gray-600">Tiêu thụ</div>
+    </div>
+
+    <!-- Clock -->
+    <div class="flex flex-col items-center col-span-1 z-10">
+      <div class="bg-black text-white text-lg px-4 py-2 rounded-md" id="clock">--:--:--</div>
+    </div>
+  </div>
+
+  <!-- Animated Flow Lines -->
+  <!-- Solar -> Inverter -->
+  <div class="absolute top-[5.5rem] left-[19%] w-[15%] h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 animate-pulse"></div>
+
+  <!-- Inverter -> Battery -->
+  <div class="absolute top-[8.5rem] left-[42%] w-[15%] h-1 bg-gradient-to-r from-green-400 to-green-600 animate-pulse delay-200"></div>
+
+  <!-- Inverter -> Grid -->
+  <div class="absolute top-[13rem] left-[42%] w-[2%] h-10 bg-gradient-to-b from-blue-400 to-blue-600 animate-pulse delay-300"></div>
+  <div class="absolute top-[15rem] left-[42%] w-[15%] h-1 bg-gradient-to-r from-blue-400 to-blue-600 animate-pulse delay-300"></div>
+
+  <!-- Grid -> Consumption -->
+  <div class="absolute top-[15rem] right-[18%] w-[12%] h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 animate-pulse delay-500"></div>
+
+  <!-- Status -->
+  <div class="absolute top-2 right-2 flex items-center space-x-2 z-20">
+    <div class="w-3 h-3 rounded-full bg-green-500 animate-ping"></div>
+    <span class="text-sm text-green-700 font-medium">Normal</span>
+  </div>
+</section>
+
+
 
 
 

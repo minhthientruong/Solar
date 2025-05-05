@@ -178,38 +178,76 @@ window.onload = () => {
 
 // Tính tiền điện
 // --- MẪU DỮ LIỆU (thay bằng fetch từ ESP32) ---
-// Giả lập dữ liệu từ ESP hoặc DB
+let viewMode = "D"; // Mặc định xem theo ngày
+
 const dailyData = [
-  { date: "2025-04-11", wh: 32000 },
-  { date: "2025-04-12", wh: 1600 },
-  { date: "2025-04-13", wh: 1000 },
-  { date: "2025-04-14", wh: 2200 },
-  { date: "2025-04-15", wh: 1200 },
-  { date: "2025-04-16", wh: 2600 },
-  { date: "2025-04-17", wh: 900 },
-  { date: "2025-04-18", wh: 1800 },
-  { date: "2025-04-19", wh: 1200 },
-  { date: "2025-04-21", wh: 1500 },
-  { date: "2025-04-22", wh: 1100 },
-  { date: "2025-04-23", wh: 1800 },
-  { date: "2025-04-24", wh: 2000 },
+  { date: "2025-04-21", wh: 132000 },
+  { date: "2025-04-22", wh: 9600 },
+  { date: "2025-04-23", wh: 19000 },
+  { date: "2025-04-24", wh: 18200 },
+  { date: "2025-04-25", wh: 17200 },
+  { date: "2025-04-26", wh: 15600 },
+  { date: "2025-04-27", wh: 116000 },
+  { date: "2025-04-28", wh: 19800 },
+  { date: "2025-04-29", wh: 14200 },
+  { date: "2025-04-30", wh: 3500 },
+  { date: "2025-05-01", wh: 15100 },
+  { date: "2025-05-02", wh: 19800 },
+  { date: "2025-05-05", wh: 18000 },
 ];
 
-// Khởi tạo chart với format label và tooltip
+// Nhóm dữ liệu theo chế độ D/W/M/Y
+function groupData(data, mode) {
+  const grouped = {};
 
-const ONE_DAY_AGO = 24 * 60 * 60 * 1000;
+  data.forEach((d) => {
+    const date = new Date(d.date);
+    let key;
+
+    if (mode === "D") {
+      key = date.toLocaleDateString("vi-VN"); // Ngày
+    } else if (mode === "W") {
+      const startOfWeek = new Date(
+        date.setDate(date.getDate() - date.getDay())
+      ); // Lấy ngày đầu tuần
+      key = startOfWeek.toLocaleDateString("vi-VN", {
+        weekday: "short",
+        day: "2-digit",
+        month: "2-digit",
+      });
+    } else if (mode === "M") {
+      key = `${date.getMonth() + 1}/${date.getFullYear()}`; // Tháng
+    } else if (mode === "Y") {
+      key = `${date.getFullYear()}`; // Năm
+    }
+
+    if (!grouped[key]) {
+      grouped[key] = { wh: 0, count: 0 };
+    }
+
+    grouped[key].wh += d.wh;
+    grouped[key].count++;
+  });
+
+  return Object.entries(grouped).map(([key, value]) => ({
+    date: key,
+    wh: value.wh,
+    avgWh: value.wh / value.count,
+  }));
+}
+
 const chart = Highcharts.chart("historyChart", {
   chart: { type: "column" },
-  title: { text: "Tiêu thụ điện theo ngày" },
+  title: { text: "Tiêu thụ điện" },
   xAxis: { categories: [], crosshair: true },
   yAxis: [
     {
       labels: {
         formatter: function () {
-          return (this.value / 1000).toFixed(1) + " kWh"; // Chia 1000 và hiển thị 1 chữ số sau dấu phẩy
+          return (this.value / 1000).toFixed(1) + " kWh";
         },
       },
-      title: { text: "kWh / ngày" },
+      title: { text: "kWh" },
     },
     {
       title: { text: "Chi phí (₫)" },
@@ -227,14 +265,9 @@ const chart = Highcharts.chart("historyChart", {
       let s = `<b>${this.x}</b><br/>`;
       this.points.forEach((pt) => {
         if (pt.series.name === "Chi phí") {
-          s += `${pt.series.name}: <b>${Highcharts.numberFormat(
-            pt.y,
-            0,
-            ",",
-            "."
-          )} ₫</b><br/>`;
+          s += `${pt.series.name}: <b>${Highcharts.numberFormat(pt.y, 0, ",", ".")} ₫</b><br/>`;
         } else {
-          s += `${pt.series.name}: <b>${(pt.y / 1000).toFixed(1)} kWh</b><br/>`; // Hiển thị 1 chữ số sau dấu phẩy
+          s += `${pt.series.name}: <b>${(pt.y / 1000).toFixed(1)} kWh</b><br/>`;
         }
       });
       return s;
@@ -246,33 +279,32 @@ const chart = Highcharts.chart("historyChart", {
   ],
 });
 
+// Cập nhật biểu đồ
 function updateChart() {
   const price = Number(document.getElementById("priceInput").value);
   const from = Date.parse(document.getElementById("fromDate").value);
   const to = Date.parse(document.getElementById("toDate").value);
 
+  // Lọc dữ liệu theo khoảng thời gian
   const filtered = dailyData.filter((d) => {
     const t = Date.parse(d.date);
     return t >= from && t <= to;
   });
 
-  const cats = filtered.map((d) => {
-    const dt = new Date(d.date);
-    return dt.toLocaleDateString("vi-VN", {
-      weekday: "short",
-      day: "2-digit",
-      month: "2-digit",
-    });
-  });
+  // Nhóm dữ liệu theo chế độ xem (D/W/M/Y)
+  const grouped = groupData(filtered, viewMode);
 
-  const cons = filtered.map((d) => d.wh);
-  const costs = filtered.map((d) => Math.round((d.wh / 1000) * price));
+  // Cập nhật danh sách các ngày/tháng/năm và dữ liệu tiêu thụ điện
+  const cats = grouped.map((d) => d.date);
+  const cons = grouped.map((d) => d.wh);
+  const costs = grouped.map((d) => Math.round((d.wh / 1000) * price));
 
   chart.xAxis[0].setCategories(cats);
   chart.series[0].setData(cons);
   chart.series[1].setData(costs);
 }
 
+// Cập nhật báo cáo
 function showReport() {
   const price = Number(document.getElementById("priceInput").value);
   const from = document.getElementById("fromDate").value;
@@ -374,113 +406,25 @@ document.getElementById("downloadReport").addEventListener("click", () => {
 })();
 
 document.getElementById("updateBtn").addEventListener("click", updateChart);
+//
+// Gắn sự kiện thay đổi chế độ xem (D/W/M/Y)
+document.querySelectorAll(".view-btn").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    // Cập nhật biến viewMode
+    viewMode = this.getAttribute("data-mode");
 
+    // Cập nhật style cho nút đã chọn
+    document.querySelectorAll(".view-btn").forEach((b) => {
+      b.classList.remove("bg-teal-100", "text-teal-800", "border-teal-300");
+      b.classList.add("bg-white", "text-gray-700");
+    });
+
+    this.classList.remove("bg-white", "text-gray-700");
+    this.classList.add("bg-teal-100", "text-teal-800", "border-teal-300");
+
+    // Gọi lại hàm cập nhật biểu đồ
+    updateChart();
+  });
+});
 // Điện nạp xả
 // Giả lập dữ liệu từ tấm pin mặt trời
-function updateSolarData() {
-  // Dữ liệu giả lập
-  const voltage = (Math.random() * 10 + 210).toFixed(2); // Điện áp từ 210V đến 220V
-  const current = (Math.random() * 5 + 5).toFixed(2); // Dòng điện từ 5A đến 10A
-  const power = (voltage * current).toFixed(2); // Công suất W (P = V * I)
-  const frequency = (Math.random() * 2 + 49).toFixed(2); // Tần số từ 49Hz đến 51Hz
-  const powerFactor = (Math.random() * 0.2 + 0.8).toFixed(2); // Hệ số công suất từ 0.8 đến 1.0
-  const energy = (Math.random() * 50 + 500).toFixed(2); // Điện năng tiêu thụ từ 500 kWh đến 550 kWh
-
-  // Cập nhật các giá trị trên giao diện
-  document.getElementById("voltageValue").innerText = `${voltage} V`;
-  document.getElementById("currentValue").innerText = `${current} A`;
-  document.getElementById("powerValue").innerText = `${power} W`;
-  document.getElementById("frequencyValue").innerText = `${frequency} Hz`;
-  document.getElementById("powerFactorValue").innerText = `${powerFactor}`;
-  document.getElementById("energyValue").innerText = `${energy} kWh`;
-
-  // Cập nhật thanh tiến trình (progress bar)
-  document.getElementById("voltageProgress").style.width = `${
-    (voltage - 210) * 10
-  }%`;
-  document.getElementById("currentProgress").style.width = `${
-    (current - 5) * 10
-  }%`;
-  document.getElementById("powerProgress").style.width = `${
-    ((power - 1100) / 1100) * 100
-  }%`;
-  document.getElementById("frequencyProgress").style.width = `${
-    (frequency - 49) * 50
-  }%`;
-  document.getElementById("powerFactorProgress").style.width = `${
-    (powerFactor - 0.8) * 500
-  }%`;
-  document.getElementById("energyProgress").style.width = `${
-    ((energy - 500) / 50) * 100
-  }%`;
-}
-
-// Cập nhật dữ liệu mỗi 5 giây
-setInterval(updateSolarData, 5000);
-
-// Gọi hàm ngay lập tức khi tải trang để hiển thị dữ liệu ban đầu
-updateSolarData();
-
-// on off đèn
-function toggleLight(icon) {
-  const isOn = icon.classList.contains("text-green-500");
-  icon.classList.toggle("text-green-500", !isOn);
-  icon.classList.toggle("text-red-500", isOn);
-
-  // Thêm xử lý logic bật tắt thiết bị thật nếu cần
-  console.log(icon.id + " is now " + (isOn ? "OFF" : "ON"));
-}
-// Giả lập số Kwh
-function generateRandomWatt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function updatePowerConsumption() {
-  const rooms = {
-    powerConsumptionGarden: generateRandomWatt(50, 200), // Khu Vườn
-    powerConsumptionLivingRoom: generateRandomWatt(100, 300), // Phòng Khách
-    powerConsumptionKitchen: generateRandomWatt(150, 500), // Phòng Bếp
-    powerConsumptionBedroom: generateRandomWatt(70, 250), // Phòng Ngủ
-  };
-
-  for (let id in rooms) {
-    const span = document.getElementById(id);
-    if (span) {
-      span.textContent = `${rooms[id]} W`;
-    }
-  }
-}
-
-// Cập nhật mỗi 3 giây
-setInterval(updatePowerConsumption, 3000);
-
-// Cập nhật ngay lần đầu
-updatePowerConsumption();
-
-// Initial call to simulate data when the page loads
-
-function updateReportData() {
-  const kwh = (Math.random() * 10).toFixed(1); // từ 0 đến 10 kWh
-  const saved = (kwh * 1800).toLocaleString("vi-VN") + "₫"; // mỗi kWh ~ 1800đ
-  const percent = Math.floor(Math.random() * 100) + 1; // 1-100%
-  const compare = (Math.random() * 2 - 1).toFixed(1); // -1 -> +1 kWh
-  const comparePercent = Math.abs(((compare / kwh) * 100).toFixed(0));
-  const isUp = compare >= 0;
-
-  document.getElementById("totalKwh").innerText = `${kwh} kWh`;
-  document.getElementById("savedMoney").innerText = saved;
-  document.getElementById("progressBar").style.width = `${percent}%`;
-  document.getElementById("progressPercent").innerText = `${percent}%`;
-  document.getElementById("compareYesterday").innerText =
-    `${compare >= 0 ? "+" : "-"}${Math.abs(compare)} kWh (${isUp ? "↑" : "↓"}${comparePercent}%)`;
-  document
-    .getElementById("compareYesterday")
-    .classList.toggle("text-yellow-400", isUp);
-  document
-    .getElementById("compareYesterday")
-    .classList.toggle("text-red-400", !isUp);
-}
-
-// Khởi tạo và cập nhật mỗi 5 giây
-updateReportData();
-setInterval(updateReportData, 5000);
