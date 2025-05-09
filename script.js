@@ -75,6 +75,7 @@ function fetchData() {
     })
     .catch((error) => console.error("Error fetching data:", error));
 }
+
 const toggle = document.getElementById("menu-toggle");
 const mobileMenu = document.getElementById("mobile-menu");
 
@@ -426,5 +427,110 @@ document.querySelectorAll(".view-btn").forEach((btn) => {
     updateChart();
   });
 });
+// on off đèn
+function toggleLight(icon) {
+  const isOn = icon.classList.contains("text-green-500");
+  icon.classList.toggle("text-green-500", !isOn);
+  icon.classList.toggle("text-red-500", isOn);
+
+  // Thêm xử lý logic bật tắt thiết bị thật nếu cần
+  console.log(icon.id + " is now " + (isOn ? "OFF" : "ON"));
+}
+// Giả lập số Kwh
+function generateRandomWatt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function updatePowerConsumption() {
+  const rooms = {
+    powerConsumptionGarden: generateRandomWatt(50, 200), // Khu Vườn
+    powerConsumptionLivingRoom: generateRandomWatt(100, 300), // Phòng Khách
+    powerConsumptionKitchen: generateRandomWatt(150, 500), // Phòng Bếp
+    powerConsumptionBedroom: generateRandomWatt(70, 250), // Phòng Ngủ
+  };
+
+  for (let id in rooms) {
+    const span = document.getElementById(id);
+    if (span) {
+      span.textContent = `${rooms[id]} W`;
+    }
+  }
+}
+
+// Cập nhật mỗi 3 giây
+setInterval(updatePowerConsumption, 3000);
+
+// Cập nhật ngay lần đầu
+updatePowerConsumption();
 // Điện nạp xả
 // Giả lập dữ liệu từ tấm pin mặt trời
+// Initial call to simulate data when the page loads
+
+function updateReportData() {
+  const kwh = (Math.random() * 10).toFixed(1); // từ 0 đến 10 kWh
+  const saved = (kwh * 1800).toLocaleString("vi-VN") + "₫"; // mỗi kWh ~ 1800đ
+  const percent = Math.floor(Math.random() * 100) + 1; // 1-100%
+  const compare = (Math.random() * 2 - 1).toFixed(1); // -1 -> +1 kWh
+  const comparePercent = Math.abs(((compare / kwh) * 100).toFixed(0));
+  const isUp = compare >= 0;
+
+  document.getElementById("totalKwh").innerText = `${kwh} kWh`;
+  document.getElementById("savedMoney").innerText = saved;
+  document.getElementById("progressBar").style.width = `${percent}%`;
+  document.getElementById("progressPercent").innerText = `${percent}%`;
+  document.getElementById("compareYesterday").innerText =
+    `${compare >= 0 ? "+" : "-"}${Math.abs(compare)} kWh (${isUp ? "↑" : "↓"}${comparePercent}%)`;
+  document
+    .getElementById("compareYesterday")
+    .classList.toggle("text-yellow-400", isUp);
+  document
+    .getElementById("compareYesterday")
+    .classList.toggle("text-red-400", !isUp);
+}
+
+// Khởi tạo và cập nhật mỗi 5 giây
+updateReportData();
+setInterval(updateReportData, 5000);
+
+// Điện nạp xả
+// Giả lập dữ liệu từ tấm pin mặt trời
+function updateSolarData() {
+  // Dữ liệu giả lập
+  const voltage = (Math.random() * 10 + 210).toFixed(2); // Điện áp từ 210V đến 220V
+  const current = (Math.random() * 5 + 5).toFixed(2); // Dòng điện từ 5A đến 10A
+  const power = (voltage * current).toFixed(2); // Công suất W (P = V * I)
+  const frequency = (Math.random() * 2 + 49).toFixed(2); // Tần số từ 49Hz đến 51Hz
+  const powerFactor = (Math.random() * 0.2 + 0.8).toFixed(2); // Hệ số công suất từ 0.8 đến 1.0
+  const energy = (Math.random() * 50 + 500).toFixed(2); // Điện năng tiêu thụ từ 500 kWh đến 550 kWh
+
+  // Cập nhật các giá trị trên giao diện
+  document.getElementById("voltageValue").innerText = `${voltage} V`;
+  document.getElementById("currentValue").innerText = `${current} A`;
+  document.getElementById("powerValue").innerText = `${power} W`;
+  document.getElementById("frequencyValue").innerText = `${frequency} Hz`;
+  document.getElementById("powerFactorValue").innerText = `${powerFactor}`;
+  document.getElementById("energyValue").innerText = `${energy} kWh`;
+
+  // Cập nhật thanh tiến trình (progress bar)
+  document.getElementById("voltageProgress").style.width = `${
+    (voltage - 210) * 10
+  }%`;
+  document.getElementById("currentProgress").style.width = `${
+    (current - 5) * 10
+  }%`;
+  document.getElementById("powerProgress").style.width = `${
+    ((power - 1100) / 1100) * 100
+  }%`;
+  document.getElementById("frequencyProgress").style.width = `${
+    (frequency - 49) * 50
+  }%`;
+  document.getElementById("powerFactorProgress").style.width = `${
+    (powerFactor - 0.8) * 500
+  }%`;
+  document.getElementById("energyProgress").style.width = `${
+    ((energy - 500) / 50) * 100
+  }%`;
+}
+
+// Cập nhật dữ liệu mỗi 5 giây
+setInterval(updateSolarData, 5000);
