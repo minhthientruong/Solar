@@ -475,7 +475,6 @@ function updateReportData() {
   const isUp = compare >= 0;
 
   document.getElementById("totalKwh").innerText = `${kwh} kWh`;
-  document.getElementById("savedMoney").innerText = saved;
   document.getElementById("progressBar").style.width = `${percent}%`;
   document.getElementById("progressPercent").innerText = `${percent}%`;
   document.getElementById("compareYesterday").innerText =
@@ -534,3 +533,143 @@ function updateSolarData() {
 
 // Cập nhật dữ liệu mỗi 5 giây
 setInterval(updateSolarData, 5000);
+
+function getRandomFloat(min, max, decimals = 1) {
+  const factor = Math.pow(10, decimals);
+  return (Math.random() * (max - min) + min).toFixed(decimals);
+}
+
+function updateStatus() {
+  // Trạng thái pin
+  const batteryPercent = parseInt(getRandomFloat(50, 100));
+  document.querySelector(".text-green-600.font-medium").innerText =
+    `Đang sạc (${batteryPercent}%)`;
+  document.querySelector(".bg-green-600").style.width = `${batteryPercent}%`;
+
+  // Năng lượng thu được
+  const harvestedPower = getRandomFloat(3.5, 6.0);
+  document.querySelectorAll(".text-yellow-600.font-medium")[0].innerText =
+    `${harvestedPower} kW`;
+  document.querySelector(".bg-yellow-400").style.width =
+    `${(harvestedPower / 6.0) * 100}%`;
+
+  // Tiêu thụ hiện tại
+  const consumption = getRandomFloat(2.0, 4.5);
+  document.querySelectorAll(".text-blue-600.font-medium")[0].innerText =
+    `${consumption} kW`;
+  document.querySelector(".bg-blue-600").style.width =
+    `${(consumption / 5.0) * 100}%`;
+
+  // Nhiệt độ hệ thống
+  const temperature = getRandomFloat(28, 42);
+  document.querySelectorAll(".text-red-600.font-medium")[0].innerText =
+    `${temperature}°C`;
+  document.querySelector(".bg-red-500").style.width =
+    `${(temperature / 50) * 100}%`;
+
+  // Thiết bị tiêu thụ (ngẫu nhiên)
+  const devices = [
+    { selector: "Điều hòa phòng khách", base: 1.2 },
+    { selector: "Tủ lạnh", base: 0.4 },
+    { selector: "Máy giặt", base: 0.8 },
+    { selector: "Đèn và thiết bị khác", base: 0.4 },
+  ];
+  const deviceSpans = document.querySelectorAll(
+    ".space-y-2 .flex.justify-between span:nth-child(2)"
+  );
+  devices.forEach((d, i) => {
+    const value = getRandomFloat(d.base * 0.8, d.base * 1.2);
+    deviceSpans[i].innerText = `${value} kW`;
+  });
+
+  // Tổng sản lượng hôm nay
+  const totalKwh = getRandomFloat(18, 30, 2);
+  document.getElementById("totalKwh").innerText = `${totalKwh} kWh`;
+
+  // Tiết kiệm được (giá điện 2500đ/kWh)
+  const savedMoney = (totalKwh * 2500)
+    .toFixed(0)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  document.getElementById("savedMoney").innerText = `${savedMoney}₫`;
+
+  // So với hôm qua
+  const delta = getRandomFloat(-3, 3, 2);
+  const percent = ((delta / totalKwh) * 100).toFixed(0);
+  const direction = delta >= 0 ? "↑" : "↓";
+  const color = delta >= 0 ? "text-yellow-500" : "text-red-500";
+  document.getElementById("compareYesterday").innerHTML =
+    `<span class="${color}">${delta > 0 ? "+" : ""}${delta} kWh (${direction}${Math.abs(percent)}%)</span>`;
+
+  // Tiến độ đạt được
+  const progress = Math.min(100, Math.round((totalKwh / 30) * 100));
+  document.getElementById("progressPercent").innerText = `${progress}%`;
+  document.getElementById("progressBar").style.width = `${progress}%`;
+}
+
+// Gọi ngay lập tức và sau đó mỗi 3 giây
+updateStatus();
+setInterval(updateStatus, 3000);
+
+// Đồng bộ dữ liệu trạm trung chuyển
+document.addEventListener("DOMContentLoaded", () => {
+  const pvPower = document.querySelector(".text-yellow-600");
+  const inverterPower = document.querySelector(".text-orange-500");
+  const batteryPower = document.querySelector(".text-green-600");
+  const batteryVoltage = document.querySelector(".text-blue-600");
+  const batteryCapacity = document.querySelectorAll(
+    ".text-gray-600.font-medium"
+  )[2];
+  const gridVoltage = document.querySelectorAll(".text-gray-700")[0];
+  const gridFrequency = document.querySelectorAll(
+    ".text-gray-600.font-medium"
+  )[3];
+  const gridPower = document.querySelector(".text-red-500");
+  const consumptionPower = document.querySelector(".text-indigo-600");
+  const clock = document.getElementById("clock");
+
+  function getRandomFloat(min, max, decimals = 2) {
+    return (Math.random() * (max - min) + min).toFixed(decimals);
+  }
+
+  function updateData() {
+    // PV Power
+    const pv = getRandomFloat(5.0, 8.2); // kW
+    pvPower.textContent = `${pv}kW`;
+
+    // Inverter Power
+    const inverter = getRandomFloat(pv * 0.35, pv * 0.55);
+    inverterPower.textContent = `${inverter}kW`;
+
+    // Battery
+    const batteryW = getRandomFloat(5.0, 6.0);
+    const voltage = getRandomFloat(52, 58, 1);
+    const capacity = getRandomFloat(65, 100, 1);
+    batteryPower.textContent = `${batteryW}kW`;
+    batteryVoltage.textContent = `${voltage}Vdc`;
+    batteryCapacity.textContent = `${capacity}% Dung lượng`;
+
+    // Grid
+    const vac = getRandomFloat(218, 222, 1);
+    const hz = getRandomFloat(49.8, 50.2, 2);
+    const gridW = Math.random() < 0.5 ? "0.00" : getRandomFloat(0.2, 0.9);
+    gridVoltage.textContent = `${vac}Vac`;
+    gridFrequency.textContent = `${hz}Hz`;
+    gridPower.textContent = `${gridW}kW`;
+
+    // Consumption
+    const consumption = getRandomFloat(1.0, 3.0);
+    consumptionPower.textContent = `${consumption}kW`;
+  }
+
+  function updateClock() {
+    const now = new Date();
+    clock.textContent = now.toLocaleTimeString("vi-VN");
+  }
+
+  updateData();
+  updateClock();
+  setInterval(() => {
+    updateData();
+    updateClock();
+  }, 3000);
+});

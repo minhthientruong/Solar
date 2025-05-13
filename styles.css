@@ -1,18 +1,98 @@
 @keyframes neonGlow {
   0% {
-    box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00,
+    box-shadow:
+      0 0 5px #00ff00,
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
       0 0 30px #00ff00;
   }
   50% {
-    box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 40px #00ff00,
+    box-shadow:
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
+      0 0 40px #00ff00,
       0 0 60px #00ff00;
   }
   100% {
-    box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00,
+    box-shadow:
+      0 0 5px #00ff00,
+      0 0 10px #00ff00,
+      0 0 20px #00ff00,
       0 0 30px #00ff00;
   }
 }
+  /* Hiệu ứng di chuyển hạt năng lượng ngang */
+  .energy-dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      to right,
+      transparent,
+      transparent 6px,
+      rgba(255, 255, 255, 0.8) 8px,
+      transparent 10px
+    );
+    animation: flow-right 1.5s infinite linear;
+  }
 
+  /* Hiệu ứng di chuyển hạt năng lượng dọc */
+  .energy-dots-vertical {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 6px,
+      rgba(255, 255, 255, 0.8) 8px,
+      transparent 10px
+    );
+    animation: flow-down 1.5s infinite linear;
+  }
+
+  /* Keyframes cho hiệu ứng chảy ngang */
+  @keyframes flow-right {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 20px 0;
+    }
+  }
+
+  /* Keyframes cho hiệu ứng chảy dọc */
+  @keyframes flow-down {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 0 20px;
+    }
+  }
+
+  /* Hiệu ứng cho mũi tên */
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+  }
+
+  /* Custom CSS cho độ rõ của các đường dẫn */
+  .border-l-6 {
+    border-left-width: 6px;
+  }
+
+  .stroke-width-2 {
+    stroke-width: 2;
+  }
 .neon-border {
   border: 5px solid #00ff00;
   border-radius: 16px;
@@ -32,7 +112,9 @@
 
 /* Hiệu ứng viền neon */
 .gauge-ring {
-  transition: background-image 0.8s linear, box-shadow 0.8s ease-in-out;
+  transition:
+    background-image 0.8s linear,
+    box-shadow 0.8s ease-in-out;
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 }
 .card {
@@ -148,12 +230,21 @@ input[type="range"] {
 /* styles.css */
 @keyframes neonPulse {
   0% {
-    box-shadow: 0 0 5px #ffa600, 0 0 10px #ffa600, 0 0 20px #ffa600;
+    box-shadow:
+      0 0 5px #ffa600,
+      0 0 10px #ffa600,
+      0 0 20px #ffa600;
   }
   50% {
-    box-shadow: 0 0 10px #ffa600, 0 0 20px #ffa600, 0 0 30px #ffa600;
+    box-shadow:
+      0 0 10px #ffa600,
+      0 0 20px #ffa600,
+      0 0 30px #ffa600;
   }
   100% {
-    box-shadow: 0 0 5px #ffa600, 0 0 10px #ffa600, 0 0 20px #ffa600;
+    box-shadow:
+      0 0 5px #ffa600,
+      0 0 10px #ffa600,
+      0 0 20px #ffa600;
   }
 }

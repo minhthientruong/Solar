@@ -417,136 +417,234 @@
   </div>
 
 </div>
-       <!-- Right Panel -->
-       <section class="relative bg-gray-50 p-6 rounded-xl shadow-lg">
-  <div class="grid grid-cols-3 gap-4 relative">
 
+</div>
+
+ <!-- Right Panel -->
+ <section class="relative bg-gray-50 p-8 rounded-xl shadow-lg">
+  <div class="grid grid-cols-3 gap-4 relative">
     <!-- Solar Panel -->
     <div class="flex flex-col items-center z-10">
-      <img src="assets/img/pinsolar.png" alt="Solar Panel" class="w-20 h-20 mb-2">
-      <div class="text-xl font-semibold text-yellow-600">7202W</div>
-      <div class="text-sm text-gray-600">Công suất PV</div>
+      <div class="bg-blue-100 p-2 rounded-lg mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="12" rx="2" class="fill-blue-500 stroke-blue-600" />
+          <line x1="9" y1="4" x2="9" y2="16" class="stroke-blue-200" />
+          <line x1="15" y1="4" x2="15" y2="16" class="stroke-blue-200" />
+          <line x1="3" y1="10" x2="21" y2="10" class="stroke-blue-200" />
+        </svg>
+      </div>
+      <div class="text-xl font-bold text-yellow-600">7202W</div>
+      <div class="text-sm text-gray-600 font-medium">Công suất PV</div>
     </div>
 
-    <!-- Inverter -->
+    <!-- Inverter - Trạm trung chuyển -->
     <div class="flex flex-col items-center z-10">
-      <img src="assets/img/traminverter.png" alt="Inverter" class="w-20 h-20 mb-2">
-      <div class="text-sm text-gray-600">Trạm trung truyển</div>
+      <div class="bg-gray-100 p-2 rounded-lg mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2" class="fill-gray-300 stroke-gray-500" />
+          <line x1="4" y1="7" x2="20" y2="7" class="stroke-gray-500" />
+          <line x1="4" y1="12" x2="20" y2="12" class="stroke-gray-500" />
+          <line x1="4" y1="17" x2="20" y2="17" class="stroke-gray-500" />
+        </svg>
+      </div>
+      <div class="text-xl font-bold text-orange-500">3100W</div>
+      <div class="text-sm text-gray-600 font-medium text-center">Trạm trung chuyển (Inverter)</div>
     </div>
 
     <!-- Battery -->
     <div class="flex flex-col items-center z-10">
-      <img src="assets/img/pinluutru.png" alt="Battery" class="w-20 h-20 mb-2">
-      <div class="text-xl font-semibold text-green-600">5733W</div>
-      <div class="text-sm text-gray-600">Công suất sạc</div>
-      <div class="text-xl font-semibold text-blue-600 mt-2">55.2Vdc</div>
-      <div class="text-sm text-gray-600">87% Dung lượng</div>
+      <div class="bg-green-50 p-2 rounded-lg mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="2" width="14" height="20" rx="2" class="fill-green-200 stroke-green-500" />
+          <line x1="7" y1="7" x2="13" y2="7" class="stroke-green-500 stroke-width-2" />
+          <line x1="10" y1="4" x2="10" y2="7" class="stroke-green-500 stroke-width-2" />
+          <rect x="17" y="7" width="4" height="10" class="fill-green-200 stroke-green-500" />
+        </svg>
+      </div>
+      <div class="text-xl font-bold text-green-600">5733W</div>
+      <div class="text-sm text-gray-600 font-medium">Công suất sạc</div>
+      <div class="text-xl font-bold text-blue-600 mt-2">55.2Vdc</div>
+      <div class="text-sm text-gray-600 font-medium">87% Dung lượng</div>
     </div>
 
     <!-- Grid -->
-    <div class="flex flex-col items-center col-span-1 z-10">
-      <img src="assets/img/dienluoi.png" alt="Grid" class="w-20 h-20 mb-2">
-      <div class="text-xl font-semibold text-gray-700">219.9Vac</div>
-      <div class="text-sm text-gray-600">50.18Hz</div>
-      <div class="text-xl font-semibold text-red-500">0W</div>
+    <div class="flex flex-col items-center col-span-1 z-10 mt-8">
+      <div class="bg-gray-100 p-2 rounded-lg mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="12,2 12,22" class="stroke-gray-500 stroke-width-2" />
+          <polyline points="8,6 12,2 16,6" class="stroke-gray-500 stroke-width-2" />
+          <polyline points="5,10 12,3 19,10" class="stroke-gray-500" />
+          <polyline points="2,14 12,4 22,14" class="stroke-gray-500" />
+        </svg>
+      </div>
+      <div class="text-xl font-bold text-gray-700">219.9Vac</div>
+      <div class="text-sm text-gray-600 font-medium">50.18Hz</div>
+      <div class="text-xl font-bold text-red-500">0W</div>
     </div>
 
     <!-- Consumption -->
-    <div class="flex flex-col items-center col-span-1 z-10">
-      <img src="assets/img/home.png" alt="Consumption" class="w-16 h-16 mb-2">
-      <div class="text-xl font-semibold text-indigo-600">1273W</div>
-      <div class="text-sm text-gray-600">Tiêu thụ</div>
+    <div class="flex flex-col items-center col-span-1 z-10 mt-8">
+      <div class="bg-blue-50 p-2 rounded-lg mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" class="fill-blue-50 stroke-blue-500" />
+          <polyline points="9 22 9 12 15 12 15 22" class="fill-blue-100 stroke-blue-500" />
+          <polyline points="7 8 12 3 17 8" class="stroke-blue-500" />
+        </svg>
+      </div>
+      <div class="text-xl font-bold text-indigo-600">1273W</div>
+      <div class="text-sm text-gray-600 font-medium">Tiêu thụ</div>
     </div>
-
     <!-- Clock -->
-    <div class="flex flex-col items-center col-span-1 z-10">
-      <div class="bg-black text-white text-lg px-4 py-2 rounded-md" id="clock">--:--:--</div>
+    <div class="flex flex-col items-center col-span-1 z-10 mt-8">
+      <div class="bg-black text-white text-2xl font-bold px-6 py-3 rounded-md shadow-lg w-32 text-center" id="clock">--:--:--</div>
     </div>
   </div>
+  <!-- Đường từ Solar Panel đến Inverter (Ngang) -->
+  <div class="absolute top-[3.2rem] left-[18%] w-[15%] h-3 flex items-center">
+    <div class="w-full h-1 bg-yellow-400 rounded-full relative overflow-hidden">
+      <div class="energy-dots"></div>
+    </div>
+    <!-- Mũi tên -->
+    <div class="w-0 h-0 border-t-4 border-b-4 border-l-6 border-solid border-l-yellow-500 border-t-transparent border-b-transparent"></div>
+  </div>
 
-  <!-- Animated Flow Lines -->
-  <!-- Solar -> Inverter -->
-  <div class="absolute top-[5.5rem] left-[19%] w-[15%] h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 animate-pulse"></div>
+  <!-- Đường từ Inverter đến Battery (Ngang) -->
+  <div class="absolute top-[3.2rem] left-[50%] w-[15%] h-3 flex items-center">
+    <div class="w-full h-1 bg-green-400 rounded-full relative overflow-hidden">
+      <div class="energy-dots bg-green-600"></div>
+    </div>
+    <!-- Mũi tên -->
+    <div class="w-0 h-0 border-t-4 border-b-4 border-l-6 border-solid border-l-green-500 border-t-transparent border-b-transparent"></div>
+  </div>
 
-  <!-- Inverter -> Battery -->
-  <div class="absolute top-[8.5rem] left-[42%] w-[15%] h-1 bg-gradient-to-r from-green-400 to-green-600 animate-pulse delay-200"></div>
+  <!-- Đường từ Grid đến Inverter (Dọc) -->
+  <div class="absolute top-[7rem] left-[33%] h-[4rem] w-3 flex justify-center">
+    <div class="h-full w-1 bg-gray-400 rounded-full relative overflow-hidden">
+      <div class="energy-dots-vertical"></div>
+    </div>
+    <!-- Mũi tên -->
+    <div class="w-0 h-0 border-l-4 border-r-4 border-b-6 border-solid border-b-gray-500 border-l-transparent border-r-transparent absolute -bottom-1"></div>
+  </div>
 
-  <!-- Inverter -> Grid -->
-  <div class="absolute top-[13rem] left-[42%] w-[2%] h-10 bg-gradient-to-b from-blue-400 to-blue-600 animate-pulse delay-300"></div>
-  <div class="absolute top-[15rem] left-[42%] w-[15%] h-1 bg-gradient-to-r from-blue-400 to-blue-600 animate-pulse delay-300"></div>
+  <!-- Đường từ Inverter đến Consumption (Ngang) -->
+  <div class="absolute top-[12rem] left-[50%] w-[15%] h-3 flex items-center">
+    <div class="w-full h-1 bg-blue-400 rounded-full relative overflow-hidden">
+      <div class="energy-dots bg-blue-600"></div>
+    </div>
+    <!-- Mũi tên -->
+    <div class="w-0 h-0 border-t-4 border-b-4 border-l-6 border-solid border-l-blue-500 border-t-transparent border-b-transparent"></div>
+  </div>
 
-  <!-- Grid -> Consumption -->
-  <div class="absolute top-[15rem] right-[18%] w-[12%] h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 animate-pulse delay-500"></div>
+  <!-- Đường từ Battery đến Consumption (Dọc) -->
+  <div class="absolute top-[7rem] right-[25%] h-[5rem] w-3 flex justify-center">
+    <div class="h-full w-1 bg-indigo-400 rounded-full relative overflow-hidden">
+      <div class="energy-dots-vertical bg-indigo-600"></div>
+    </div>
+    <!-- Mũi tên -->
+    <div class="w-0 h-0 border-l-4 border-r-4 border-b-6 border-solid border-b-indigo-500 border-l-transparent border-r-transparent absolute -bottom-1"></div>
+  </div>
 
-  <!-- Status -->
-  <div class="absolute top-2 right-2 flex items-center space-x-2 z-20">
-    <div class="w-3 h-3 rounded-full bg-green-500 animate-ping"></div>
+  <!-- Status Indicator -->
+  <div class="absolute top-2 right-2 flex items-center space-x-2 z-20 bg-green-50 px-3 py-1 rounded-full shadow-sm">
+    <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
     <span class="text-sm text-green-700 font-medium">Normal</span>
   </div>
 </section>
 
-
-
-
-
     <!-- Power and Energy Section -->
 <div id="reportCard" class="bg-white/30 backdrop-blur-xl bg-gradient-to-br from-white via-orange-50 to-orange-100 text-gray-800 rounded-2xl p-6 shadow-2xl w-full mx-auto">
-  <div class="flex justify-between items-start">
-    <div>
-      <h3 class="text-xl font-semibold mb-1">Báo cáo hôm nay</h3>
-      <p class="text-sm text-gray-600">Tổng sản lượng</p>
-      <p id="totalKwh" class="text-2xl font-bold text-green-600 mt-1">0.0 kWh</p>
+      <!-- Electricity Price Input -->
+        <h3 class="text-xl font-semibold mb-4">Trạng Thái Hệ Thống</h3>
+        <div class="space-y-4">
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <span>Trạng thái pin</span>
+                    <span class="text-green-600 font-medium">Đang sạc (76%)</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 76%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <span>Năng lượng thu được</span>
+                    <span class="text-yellow-600 font-medium">4.2 kW</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 65%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <span>Tiêu thụ hiện tại</span>
+                    <span class="text-blue-600 font-medium">2.8 kW</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <span>Nhiệt độ hệ thống</span>
+                    <span class="text-red-600 font-medium">32°C</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-red-500 h-2.5 rounded-full" style="width: 40%"></div>
+                </div>
+            </div>
+            <div class="pt-4 border-t">
+                <h4 class="font-medium mb-2">Thiết bị đang hoạt động</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span>Điều hòa phòng khách</span>
+                        <span>1.2 kW</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Tủ lạnh</span>
+                        <span>0.4 kW</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Máy giặt</span>
+                        <span>0.8 kW</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Đèn và thiết bị khác</span>
+                        <span>0.4 kW</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-xl font-semibold mb-1">Báo cáo hôm nay</h3>
+            <p class="text-sm text-gray-600">Tổng sản lượng</p>
+            <p id="totalKwh" class="text-2xl font-bold text-green-600 mt-1">0.0 kWh</p>
 
-      <p class="mt-3 text-sm text-gray-600">Tiết kiệm được</p>
-      <p id="savedMoney" class="text-lg font-bold text-emerald-600">0₫</p>
+            <p class="mt-3 text-sm text-gray-600">Tiết kiệm được</p>
+            <p id="savedMoney" class="text-lg font-bold text-emerald-600">0₫</p>
 
-      <div class="mt-4">
-        <p class="text-sm text-gray-500">So với hôm qua:</p>
-        <p id="compareYesterday" class="text-sm font-semibold text-yellow-500">+0.0 kWh (↑0%)</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Progress bar -->
+            <div class="mt-4">
+              <p class="text-sm text-gray-500">So với hôm qua:</p>
+              <p id="compareYesterday" class="text-sm font-semibold text-yellow-500">+0.0 kWh (↑0%)</p>
+            </div>
+          </div>
+        </div>
+          <!-- Progress bar -->
   <div class="mt-6">
     <div class="flex justify-between text-sm text-gray-500 mb-1">
       <span>Đạt được</span>
       <span id="progressPercent">0%</span>
-    </div>
-    <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-      <div id="progressBar" class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+
     </div>
   </div>
-</div>
 
-           <!-- Electricity Price Input -->
-           <div class="bg-white p-4 rounded-lg shadow-md mt-6">
-             <div class="mb-4">
-               <label for="priceInput" class="block text-gray-700 text-sm"
-                 >Đơn giá (đ/1kWh):</label
-               >
-               <input
-                 type="number"
-                 id="priceInput"
-                 class="border border-gray-300 p-2 rounded w-full"
-                 placeholder="Nhập đơn giá"
-                 onchange="updateElectricityCost()" />
-             </div>
-             <div class="mb-4">
-               <button
-                 class="bg-blue-500 text-white py-2 px-4 rounded-lg"
-                 onclick="calculateElectricityCost()">
-                 Cập nhật hóa đơn điện
-               </button>
-             </div>
-             <div id="electricityCostResult" class="mt-4"></div>
-           </div>
+  <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+    <div id="progressBar" class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+  </div>
+        </div>
          </div>
        </div>
-
      </div>
-
-
      <!-- Custom Script -->
 <script src="script.js"></script>
 
