@@ -1,101 +1,112 @@
-// Hàm đổi màu pin theo phần trăm
-function getBatteryColor(amount) {
-  if (amount === undefined) return "#0000ff"; // Không sạc (xanh dương)
-  if (amount < 0.3) return "#ff0000"; // Đỏ (0-30%)
-  if (amount < 0.7) return "#ffff00"; // Vàng (30-70%)
-  return "#00ff00"; // Xanh lá (trên 70%)
+// ---------- Battery Color Function ----------
+function getBatteryColor(isCharging) {
+  return isCharging ? "#00ff00" : "#cccccc";
 }
 
-// Dữ liệu pin mô phỏng với Pin A và Pin B
-const batteryData = [
-  {
-    name: "Pin A",
-    start: Date.UTC(2025, 3, 14, 0, 0),
-    end: Date.UTC(2025, 3, 17, 23, 59),
-    completed: { amount: 0.1 },
-  },
-  {
-    name: "Pin B",
-    start: Date.UTC(2025, 3, 14, 0, 0),
-    end: Date.UTC(2025, 3, 17, 23, 59),
-    completed: { amount: 0 },
-  },
-];
+// ---------- Charging Time Checker ----------
+function isChargingTime(hour, minute) {
+  if (hour >= 6 && hour < 8) return true;
+  if (hour === 8 && minute < 15) return false;
+  if ((hour === 8 && minute >= 15) || (hour > 8 && hour < 12)) return true;
+  return false;
+}
 
-// Tính toán min và max từ dữ liệu
-const startDates = batteryData.map((item) => item.start);
-const endDates = batteryData.map((item) => item.end);
-const minDate = Math.min(...startDates);
-const maxDate = Math.max(...endDates);
+// ---------- Timeline Generator ----------
+function generateChargingTimeline(
+  pinName,
+  startDate,
+  endDate,
+  intervalMinutes = 15
+) {
+  const segments = [];
+  const current = new Date(startDate);
+  while (current < endDate) {
+    const hour = current.getHours();
+    const minute = current.getMinutes();
+    const next = new Date(current);
+    next.setMinutes(minute + intervalMinutes);
+    const isCharging = isChargingTime(hour, minute);
+    segments.push({
+      name: pinName,
+      start: Date.UTC(
+        current.getFullYear(),
+        current.getMonth(),
+        current.getDate(),
+        hour,
+        minute
+      ),
+      end: Date.UTC(
+        next.getFullYear(),
+        next.getMonth(),
+        next.getDate(),
+        next.getHours(),
+        next.getMinutes()
+      ),
+      color: getBatteryColor(isCharging),
+      charging: isCharging,
+    });
+    current.setMinutes(minute + intervalMinutes);
+  }
+  return segments;
+}
 
-// Tạo biểu đồ Gantt
-const chart = Highcharts.ganttChart("container", {
-  chart: { zoomType: "x" },
-  title: { text: "Dung lượng pin năng lượng mặt trời" },
-  xAxis: {
-    min: minDate,
-    max: maxDate,
-    currentDateIndicator: true,
-  },
-  yAxis: { uniqueNames: true },
-  navigator: {
-    enabled: true,
-    xAxis: {
-      min: minDate,
-      max: maxDate,
+// ---------- Chart Initialization ----------
+let chart;
+function updateGanttChart() {
+  const now = new Date();
+  const startDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - 6,
+    0,
+    0
+  );
+  const endDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59
+  );
+  const timelineData = [
+    ...generateChargingTimeline("Pin A", startDate, endDate),
+    ...generateChargingTimeline("Pin B", startDate, endDate),
+  ];
+  chart = Highcharts.ganttChart("container", {
+    chart: { zoomType: "x" },
+    title: { text: "Lịch Sử Thời Gian Sạc Pin Năng Lượng Mặt Trời" },
+    xAxis: { currentDateIndicator: true },
+    yAxis: { uniqueNames: true },
+    navigator: { enabled: true },
+    scrollbar: { enabled: true },
+    rangeSelector: {
+      enabled: true,
+      selected: 1,
+      buttons: [
+        { type: "minute", count: 1, text: "1m" },
+        { type: "minute", count: 3, text: "3m" },
+        { type: "minute", count: 6, text: "6m" },
+        { type: "hour", count: 1, text: "1h" },
+        { type: "hour", count: 2, text: "2h" },
+        { type: "all", text: "ALL" },
+      ],
     },
-  },
-  scrollbar: { enabled: true },
-  rangeSelector: {
-    enabled: true,
-    selected: 1, // Mặc định là khoảng thời gian 3 phút
-    buttons: [
-      {
-        type: "minute",
-        count: 1,
-        text: "1m",
+    tooltip: {
+      pointFormatter: function () {
+        return `<b>${this.name}</b><br/>
+                Từ: ${Highcharts.dateFormat("%Y-%m-%d %H:%M", this.start)}<br/>
+                Đến: ${Highcharts.dateFormat("%Y-%m-%d %H:%M", this.end)}<br/>
+                Trạng thái: ${this.charging ? "Đang sạc 🔋" : "Không sạc 🌙"}`;
       },
-      {
-        type: "minute",
-        count: 3,
-        text: "3m",
-      },
-      {
-        type: "minute",
-        count: 6,
-        text: "6m",
-      },
-      {
-        type: "all",
-        text: "ALL",
-      },
-    ],
-  },
-  tooltip: {
-    pointFormatter: function () {
-      const completed = this.completed?.amount ?? 0;
-      return (
-        `<span style="color:${this.color}">●</span> <b>${this.name}</b><br/>` +
-        `Từ: ${Highcharts.dateFormat("%Y-%m-%d %H:%M", this.start)}<br/>` +
-        `Đến: ${Highcharts.dateFormat("%Y-%m-%d %H:%M", this.end)}<br/>` +
-        `Đã sạc: ${(completed * 100).toFixed(1)}%`
-      );
     },
-  },
-  series: [
-    {
-      name: "Dung lượng pin",
-      data: batteryData.map((item) => ({
-        ...item,
-        color: getBatteryColor(item.completed?.amount),
-      })),
-    },
-  ],
-});
+    series: [{ name: "Lịch sử sạc", data: timelineData }],
+  });
+}
+updateGanttChart();
 
-// Giả lập sạc
-const chargingDurationA = 1 * 60 * 1000; // 1 phút
-const chargingDurationB = 2 * 60 * 1000; // 2 phút
+// ---------- Simulation & Update ----------
+const chargingDurationA = 1 * 60 * 1000;
+const chargingDurationB = 2 * 60 * 1000;
 const startTimeA = Date.now();
 const startTimeB = Date.now();
 
@@ -109,66 +120,54 @@ function formatRemainingTime(ms) {
 function updateBorderProgress(percent, elementId) {
   const el = document.getElementById(elementId);
   const deg = (percent / 100) * 360;
-  if (percent >= 100) {
-    el.classList.add("glow-border");
-  } else {
-    el.classList.remove("glow-border");
-  }
   el.style.borderImage = `conic-gradient(#00ff00 ${deg}deg, transparent 0deg) 1`;
   el.style.borderStyle = "solid";
   el.style.borderWidth = "6px";
   el.style.borderRadius = "16px";
+  el.classList.toggle("glow-border", percent >= 100);
 }
 
 function updateSimulatedCharging() {
   const now = Date.now();
-
-  // --- Pin A ---
   const elapsedA = now - startTimeA;
+  const elapsedB = now - startTimeB;
   const percentA = Math.min((elapsedA / chargingDurationA) * 100, 100);
+  const percentB = Math.min((elapsedB / chargingDurationB) * 100, 100);
   const remainingA = Math.max(chargingDurationA - elapsedA, 0);
+  const remainingB = Math.max(chargingDurationB - elapsedB, 0);
 
-  document.getElementById("solarPercentage").textContent = `${percentA.toFixed(
-    1
-  )}%`;
+  document.getElementById("solarPercentage").textContent =
+    `${percentA.toFixed(1)}%`;
   document.getElementById("solarProgress").style.width = `${percentA}%`;
   document.getElementById("chargingStatus").textContent =
     percentA < 100
       ? `Đang sạc 🔋 (${formatRemainingTime(remainingA)})`
       : "Đã đầy ✅";
-
   updateBorderProgress(percentA, "borderA");
 
-  // --- Pin B ---
-  const elapsedB = now - startTimeB;
-  const percentB = Math.min((elapsedB / chargingDurationB) * 100, 100);
-  const remainingB = Math.max(chargingDurationB - elapsedB, 0);
-
-  document.getElementById("solarPercentageB").textContent = `${percentB.toFixed(
-    1
-  )}%`;
+  document.getElementById("solarPercentageB").textContent =
+    `${percentB.toFixed(1)}%`;
   document.getElementById("solarProgressB").style.width = `${percentB}%`;
   document.getElementById("chargingStatusB").textContent =
     percentB < 100
       ? `Đang sạc 🔋 (${formatRemainingTime(remainingB)})`
       : "Đã đầy ✅";
-
   updateBorderProgress(percentB, "borderB");
 
-  // Cập nhật biểu đồ
-  chart.series[0].points[0].update({
-    completed: { amount: percentA / 100 },
-    color: getBatteryColor(percentA / 100),
-  });
-  chart.series[0].points[1].update({
-    completed: { amount: percentB / 100 },
-    color: getBatteryColor(percentB / 100),
-  });
+  if (chart?.series?.[0]?.points?.length >= 2) {
+    chart.series[0].points[0].update({
+      completed: { amount: percentA / 100 },
+      color: getBatteryColor(percentA / 100),
+    });
+    chart.series[0].points[1].update({
+      completed: { amount: percentB / 100 },
+      color: getBatteryColor(percentB / 100),
+    });
+  }
 }
-
-// Gọi lần đầu và lặp lại mỗi 5s
-updateSimulatedCharging();
 setInterval(updateSimulatedCharging, 5000);
+updateSimulatedCharging();
+
 // Function to simulate random solar data Giả lập 2 Card
 function simulateSolarData() {
   // Pin A Data
