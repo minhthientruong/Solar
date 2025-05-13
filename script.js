@@ -646,7 +646,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const capacity = getRandomFloat(65, 100, 1);
     batteryPower.textContent = `${batteryW}kW`;
     batteryVoltage.textContent = `${voltage}Vdc`;
-    batteryCapacity.textContent = `${capacity}% Dung lượng`;
 
     // Grid
     const vac = getRandomFloat(218, 222, 1);
