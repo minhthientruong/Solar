@@ -652,7 +652,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const vac = getRandomFloat(218, 222, 1);
     const hz = getRandomFloat(49.8, 50.2, 2);
     const gridW = Math.random() < 0.5 ? "0.00" : getRandomFloat(0.2, 0.9);
-    gridVoltage.textContent = `${vac}Vac`;
     gridFrequency.textContent = `${hz}Hz`;
     gridPower.textContent = `${gridW}kW`;
 
